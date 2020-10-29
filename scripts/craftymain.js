@@ -4,14 +4,17 @@ var wizardspeed =.5;
 
   Crafty.init(800, 500, document.getElementById("game"));
   
-  Crafty.sprite(20, "img/sprites.png",{
+  Crafty.sprite(20, "img/sprites20.png",{
     grass1: [0,0],
     grass2: [1,0],
     grass3: [2,0],
-    pinkman: [0,1],
-    wizard: [0,2],
-    wall: [0,3],
-    star: [1,3]
+    grass4: [3,0],
+    wall: [0,1],
+    star: [1,1]
+  });
+  Crafty.sprite(40, "img/sprites40.png",{
+    pinkman: [0,0],
+    wizard: [1,0],
   });
 
   Crafty.scene("first",function(){
@@ -19,7 +22,7 @@ var wizardspeed =.5;
            function generateWorld() {
             for (var i = 0; i < 40; i++) {
               for (var j = 0; j < 25; j++) {
-                 grassType = Math.floor((Math.random()*3)+1)
+                 grassType = Math.floor((Math.random()*4)+1)
                  Crafty.e("2D, Canvas, Color, grass"+grassType)
                   .attr({x: i * 20, y: j * 20})
                   .color("none");
@@ -107,7 +110,18 @@ var wizardspeed =.5;
           .checkHits("pinkman")
           .collision()
           .bind("HitOn",function(){
-            pinkman.x-=20;
+            if(wizard.x<pinkman.x){
+              pinkman.x+=20
+            }
+            if(wizard.x>pinkman.x){
+              pinkman.x-=20
+            }
+            if(wizard.y<pinkman.y){
+              pinkman.y+=20
+            }
+            if(wizard.y>pinkman.y){
+              pinkman.y-=20
+            }
           })
 
           function starcollector(){
@@ -121,7 +135,7 @@ var wizardspeed =.5;
             .collision()
             .bind("HitOn", function(){
                 starcounter++;
-                wizardspeed += starcounter;
+                wizardspeed=wizardspeed*1.2;
                 star.destroy();
                 starcollector();
                 $("#stars").html("gwiazdy:"+starcounter)
