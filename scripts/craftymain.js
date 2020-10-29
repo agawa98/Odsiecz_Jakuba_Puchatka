@@ -1,5 +1,6 @@
 
-var screenWidth = 900;
+var starcounter = 0;
+var wizardspeed =.5;
 
   Crafty.init(800, 500, document.getElementById("game"));
   
@@ -9,7 +10,8 @@ var screenWidth = 900;
     grass3: [2,0],
     pinkman: [0,1],
     wizard: [0,2],
-    wall: [0,3]
+    wall: [0,3],
+    star: [1,3]
   });
 
   Crafty.scene("first",function(){
@@ -70,25 +72,25 @@ var screenWidth = 900;
           }
         Crafty.bind("EnterFrame", function(){
           if(pinkman.x-wizard.x<0){
-            wizard.x-=.5;
+            wizard.x-=wizardspeed;
           }
           else{
-            wizard.x+=.5;
+            wizard.x+=wizardspeed;
           }
           if(pinkman.y-wizard.y<0){
-            wizard.y-=.5;
+            wizard.y-=wizardspeed;
           }
           else{
-            wizard.y+=.5;
+            wizard.y+=wizardspeed;
           }
         })
 
-
-          generateWorld();
-          generateWestWall();
-          generateEastWall();
-          generateSouthWall();
-          generateNorthWall();
+        generateWorld();
+        generateWestWall();
+        generateEastWall();
+        generateSouthWall();
+        generateNorthWall();
+          
 
 
           pinkman = Crafty.e("2D, Canvas, Fourway, Collision, Solid, pinkman")
@@ -103,14 +105,31 @@ var screenWidth = 900;
           wizard = Crafty.e("2D, Canvas, Solid, Collision, wizard")
           .attr({x:700, y:200, w:40, h:40})
           .checkHits("pinkman")
+          .collision()
           .bind("HitOn",function(){
             pinkman.x-=20;
           })
+
+          function starcollector(){
+
+            starx = Math.floor((Math.random()*700)+50)
+            stary = Math.floor((Math.random()*400)+50)
+
+            star = Crafty.e("2D, Canvas, Solid, Collision, star")
+            .attr({x: starx, y: stary, w:20, h:20})
+            .checkHits("pinkman")
+            .collision()
+            .bind("HitOn", function(){
+                starcounter++;
+                wizardspeed += starcounter;
+                star.destroy();
+                starcollector();
+                $("#stars").html("gwiazdy:"+starcounter)
+            })
+          }
+          
+          starcollector();
+          
   })
 
-
-  
-
 Crafty.enterScene("first")
-
-    
