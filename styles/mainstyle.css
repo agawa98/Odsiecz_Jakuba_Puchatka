@@ -1,0 +1,31 @@
+*{
+    margin:0;
+    padding:0;
+}
+
+body{
+    overflow: hidden;
+}
+
+#game{
+    border-style: solid;
+    border-width: 10px;
+    border-color: yellow;
+    float:left;
+    width:820px;
+}
+#text{
+    float:right;
+    border-style: double;
+    border-width: 10px;
+    border-color: purple;
+    background-color: rgb(134, 32, 13);
+    font-size: 20px;
+    height: 500px;
+    width:526px;
+}
+#textheader{
+    text-align: center;
+    font-size:50px;
+    font-family: 'Courier New', Courier, monospace;
+}
