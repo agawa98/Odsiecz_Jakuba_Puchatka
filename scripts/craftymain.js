@@ -1,4 +1,4 @@
-
+var pinkmanhp = 100;
 var starcounter = 0;
 var wizardspeed =.5;
 
@@ -16,6 +16,19 @@ var wizardspeed =.5;
     pinkman: [0,0],
     wizard: [1,0],
   });
+
+  function healthloss(damage){
+    pinkmanhp-=damage;
+    $("#healthbar").html("HP: " + pinkmanhp);
+    $("#healthbarbar").val(pinkmanhp);
+     ispinkmandeadyet();
+  }
+
+  function ispinkmandeadyet(){
+    if(pinkmanhp<1){
+      Crafty.enterScene("dead");
+    }
+  }
 
   Crafty.scene("first",function(){
           
@@ -93,11 +106,11 @@ var wizardspeed =.5;
         generateEastWall();
         generateSouthWall();
         generateNorthWall();
-          
 
+        
 
           pinkman = Crafty.e("2D, Canvas, Fourway, Collision, Solid, pinkman")
-          .attr({x:400, y:250, w:50, h:40})
+          .attr({x:400, y:250, w:40, h:40})
           .fourway(200)
           .collision()
           .checkHits("Solid")
@@ -122,6 +135,8 @@ var wizardspeed =.5;
             if(wizard.y>pinkman.y){
               pinkman.y-=20
             }
+            let damage = 10;
+            healthloss(damage);
           })
 
           function starcollector(){
@@ -144,6 +159,14 @@ var wizardspeed =.5;
           
           starcollector();
           
+  })
+
+  Crafty.scene("dead", function(){
+    Crafty.background("black");
+    Crafty.e("Text, 2D, DOM")
+    .text("Zginoles. Odswiez strone by zagrac ponownie")
+    .attr({x:30, y:230, w: 700, h:50})
+    .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"})
   })
 
 Crafty.enterScene("first")
