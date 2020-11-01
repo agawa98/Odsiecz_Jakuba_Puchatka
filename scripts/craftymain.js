@@ -26,10 +26,19 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
   });
 
   function healthloss(damage){
-    jakubpuchatekhp-=damage;
-    $("#healthbar").html("HP: " + jakubpuchatekhp);
-    $("#healthbarbar").val(jakubpuchatekhp);
-     isjakubpuchatekdeadyet();
+    if(swordpickedup == false){
+      jakubpuchatekhp -=damage;
+      $("#healthbar").html("HP: " + jakubpuchatekhp);
+      $("#healthbarbar").val(jakubpuchatekhp);
+      console.log("sd")
+    }
+    if(swordpickedup == true){
+      console.log("sad")
+      swordjakubpuchatekhp-=damage;
+      $("#healthbar").html("HP: " + swordjakubpuchatekhp);
+      $("#healthbarbar").val(swordjakubpuchatekhp);
+    }
+    isjakubpuchatekdeadyet();
   }
 
   function cleardialog(){
@@ -328,7 +337,8 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
 
 
   Crafty.scene("wizarddead", function(){
-    swordjakubpuchatekhp=100;
+    let damage = swordjakubpuchatekhp-100;
+    healthloss(damage);
     Crafty.background("green");
     Crafty.e("Text, 2D, DOM")
     .text("Brawo, rozgromiłeś Czarodzieja! Rozpoczynanie następnego poziomu za chwilę...")
