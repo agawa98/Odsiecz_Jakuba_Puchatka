@@ -22,7 +22,7 @@ body{
     border-color: purple;
     background-color: rgb(134, 32, 13);
     font-size: 20px;
-    height: 500px;
+    height: 605px;
     width:526px;
 }
 #textheader{
@@ -30,6 +30,14 @@ body{
     font-size:50px;
     font-family: 'Courier New', Courier, monospace;
     color: white;
+}
+#bubblecontainer{
+    text-align: left;
+    font-size: 25px;
+    color:rgb(231, 225, 255);
+}
+.bubble{
+    padding: 10px;
 }
 #statusbar{
     border-color: green;
@@ -51,4 +59,15 @@ body{
     position:relative;
     top:5px;
     color: red;
+}
+#objectivelist{
+    border-bottom: 2px dashed black;
+}
+.objective{
+    font-weight: bold;
+    font-size: 30px;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 15px;
+    color: rgb(0, 0, 0);
+    text-shadow: -1px -1px 0 rgb(255, 255, 255), 1px -1px 0 rgb(255, 255, 255), -1px 1px 0 rgb(255, 255, 255), 1px 1px 0 rgb(255, 255, 255);
 }
