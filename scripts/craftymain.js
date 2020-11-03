@@ -1,6 +1,8 @@
 var acounter = 0
 var bcounter = 0;
 var ccounter = 0;
+var dcounter = 0;
+var ecounter = 0;
 var counterskel=0
 var skeletoncounter=0;
 var jakubpuchatekhp = 100;
@@ -21,7 +23,7 @@ var swordpickedup = false;
 var skelspawned= false;
 var medpackpickedup =true;
 var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co ty robisz z moimi gwiazdami??", "Czarodziej: Stój!!!!!", "Czarodziej: *sapie*"]
-
+var skeletontext = ["*kości stukają*", "Co ty tu robisz??", "Co zrobiłeś z Czarodziejem???"]
   Crafty.init(800, 500, document.getElementById("game"));
   
   Crafty.sprite(20, "img/sprites20.png",{
@@ -68,7 +70,15 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
 
 
 
-
+  function newtask(content, id){
+    var text = document.createTextNode(content);
+    var parag = document.createElement("p");
+    parag.className = "objective"
+    parag.id = id;
+    var objdiv = document.getElementById("objectivelist")
+    parag.appendChild(text);
+    objdiv.appendChild(parag);
+  }
 
   function healthloss(damage){
     if(swordpickedup == false){
@@ -87,6 +97,8 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
   function cleardialog(){
     $(".bubble").remove();
   }
+
+
 
   function isjakubpuchatekdeadyet(){
     if(swordpickedup ==true){
@@ -113,9 +125,13 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
   }
 
   function caniopenbars(){
+    if(Math.round(Math.random()*4)>3){
+      newdialogbubble(skeletontext, 2);
+    }
     openbars++;
     if(openbars==4){
       ironbars.destroy();
+      objectivecompleted("skeletonobjective");
     }
   }
   function isnormalskeletondeadyet(){
@@ -147,11 +163,11 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
     document.getElementById(objectiveid).style.color = "green";
   }
 
-  function newdialogbubble(){
-    let los=Math.round(Math.random()*3);
+  function newdialogbubble(whicharray, numberofarraycontentsminusone){
+    let los=Math.round(Math.random()*numberofarraycontentsminusone);
     var parag = document.createElement("p");
     parag.className = "bubble";
-    var text = document.createTextNode(wizardtext[los]);
+    var text = document.createTextNode(whicharray[los]);
     var bubblediv = document.getElementById("bubblecontainer");
     parag.appendChild(text);
     bubblediv.appendChild(parag);
@@ -171,6 +187,35 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
   function clearobjectives(){
     $(".objective").remove();
   }
+
+  Crafty.scene("introduction", function(){
+    Crafty.e("2D, DOM, Text")
+    .text("Po tym, jak Kłapouchy okazał się agentem KGB, który miał na celu eksterminację wszystkich obywateli Stumilowego Lasu, Jakub Puchatek miał już dość tych zdradzieckich rusków.")
+    .attr({x:30, y:230, w: 700, h:50})
+    .css({"text-align": "center", "color": "white", "font-size": "20px", "font-family": "'Courier New', Courier, monospace;"})
+    .bind("EnterFrame", function(){
+      dcounter++;
+      if(dcounter==400){
+        Crafty.enterScene("introduction2")
+      }
+    })
+  })
+
+  Crafty.scene("introduction2", function(){
+    Crafty.e("2D, DOM, Text")
+    .text("Zaraz po pogrzebie Krzysia wyruszył w podróż do filii rosyjskiej agencji niecałe 2500km stąd. Pierwszą przeszkodę spotkał jeszcze w swoim rodzimym lesie.")
+    .attr({x:30, y:230, w: 700, h:50})
+    .css({"text-align": "center", "color": "white", "font-size": "20px", "font-family": "'Courier New', Courier, monospace;"})
+    .bind("EnterFrame", function(){
+      ecounter++;
+      if(ecounter==400){
+        Crafty.enterScene("first")
+      }
+    })
+  })
+
+
+
 
   Crafty.scene("first",function(){
           
@@ -325,7 +370,7 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
                   objectiveid="stars";
                   objectivecompleted(objectiveid);
 
-                  showwizardobjective();
+                  newtask("Rozpruj Czarodzieja!!!", "wizardobjective");
                   
                   sword = Crafty.e("2D, Canvas, Solid, Collision, sword")
                   .attr({x: 100, y:210, w:40, h:40})
@@ -367,8 +412,7 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
                         if(swordwizard.y>swordjakubpuchatek.y){
                           swordjakubpuchatek.y-=20
                         }
-                        let damage = 10;
-                        healthloss(damage);
+                        healthloss(10);
                       })
                     swordwizardspeed = 2.5;
                     wizard.destroy();
@@ -390,7 +434,7 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
                 }
                 let los = Math.floor(Math.random()*100)
                 if(los>75){
-                  newdialogbubble()
+                  newdialogbubble(wizardtext, 3)
                 }
             })
           }
@@ -408,15 +452,15 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
     healthloss(damage);
     Crafty.background("green");
     Crafty.e("Text, 2D, DOM")
-    .text("Brawo, rozgromiłeś Czarodzieja! Rozpoczynanie następnego poziomu za chwilę...")
-    .attr({x:30, y:230, w: 700, h:50})
+    .text("Brawo, rozgromiłeś Czarodzieja! Przeszukując jego zwłoki w poszukiwaniu magicznych przedmiotów, natrafiasz na błyszczący pierścień. Po założeniu go na palec przenosi cię on do komnaty Czarodzieja...")
+    .attr({x:30, y:130, w: 700, h:50})
     .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"})
     .bind("EnterFrame", function(){
       acounter++;
-      if(acounter>385){
+      if(acounter==250){
         Crafty.enterScene("second")
       }
-      if(acounter>380){
+      if(acounter==249){
         clearobjectives();
       }
     })
@@ -455,8 +499,7 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.x+=12;
-          let damage = 20
-          healthloss(damage);
+          healthloss(20);
           })
       }
     }
@@ -474,8 +517,7 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.x-=12;
-          let damage = 20
-          healthloss(damage);
+          healthloss(20);
           })
       }
     }
@@ -511,8 +553,7 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.y+=12;
-          let damage = 20
-          healthloss(damage);
+          healthloss(20);
           })
       }
     }
@@ -525,8 +566,7 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.y-=12; 
-          let damage = 20
-          healthloss(damage);
+          healthloss(20);
           })
       }
     }
@@ -552,6 +592,9 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
     generateBridge();
     generateIronBars();
     generateNextLevelTransition();
+
+    newtask("Zabij cztery szkielety aby móc otworzyć bramę!", "skeletonobjective");
+
 
 
     swordjakubpuchatek = Crafty.e("2D, Canvas, Fourway, Collision, Solid, swordjakubpuchatek")
@@ -591,8 +634,7 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
                 .collision()
                 .bind("HitOn", function(){
                   if(swordjakubpuchatekhp<76){
-                    let damage = -25;
-                    healthloss(damage);
+                    healthloss(-25);
                     medpack.destroy()
                     medpackpickedup=true;
                   }
@@ -610,11 +652,8 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
 
       Crafty.bind("EnterFrame", function(){
         ccounter++
-        console.log(ccounter);
         if(ccounter == 100 && swordjakubpuchatekhp <99){
-          console.log("aaaaaaa")
-          damage = -2;
-          healthloss(damage);
+          healthloss(-2);
         }
         if(ccounter==100){
           ccounter = 0;
@@ -666,8 +705,7 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
             if(normalskeleton.y>swordjakubpuchatek.y){
               swordjakubpuchatek.y-=20
             }
-            let damage = 20;
-            healthloss(damage);
+            healthloss(20);
           })
           skelspawned =true;
           skeletoncounter++;
@@ -691,8 +729,7 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
             if(bigskeleton.y>swordjakubpuchatek.y){
               swordjakubpuchatek.y-=40
             }
-            let damage = 35;
-            healthloss(damage);
+            healthloss(35);
           })
           skelspawned =true;
           skeletoncounter++;
@@ -716,8 +753,7 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
             if(yskeleton.y>swordjakubpuchatek.y){
               swordjakubpuchatek.y-=20
             }
-            let damage = 10;
-            healthloss(damage);
+            healthloss(10);
           })
           skelspawned =true;
           skeletoncounter++;
@@ -796,4 +832,4 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
 
 
 
-Crafty.enterScene("first")
+Crafty.enterScene("introduction")
