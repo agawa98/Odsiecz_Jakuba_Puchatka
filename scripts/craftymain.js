@@ -1,14 +1,25 @@
+var acounter = 0
+var bcounter = 0;
+var ccounter = 0;
 var counterskel=0
 var skeletoncounter=0;
-var counter = 0;
 var jakubpuchatekhp = 100;
 var swordjakubpuchatekhp=100;
 var wizardhp = 150;
 var starcounter = 0;
 var wizardspeed =.5;
-var skeletonspeed = 1.5;
+var normalskeletonspeed = 1.8;
+var bigskeletonspeed = 1.5;
+var xskeletonspeed = 3;
+var yskeletonspeed = 3;
+var normalskeletonhp = 120;
+var bigskeletonhp = 160;
+var xskeletonhp = 100;
+var yskeletonhp = 100;
+var openbars =0;
 var swordpickedup = false;
 var skelspawned= false;
+var medpackpickedup =true;
 var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co ty robisz z moimi gwiazdami??", "Czarodziej: Stój!!!!!", "Czarodziej: *sapie*"]
 
   Crafty.init(800, 500, document.getElementById("game"));
@@ -32,14 +43,22 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
     cave8: [3,3],
     lava1: [0,4],
     lava2: [1,4],
+    bridge1: [2,4],
+    bridge2: [3,4],
   });
   Crafty.sprite(40, "img/sprites40.png",{
     jakubpuchatek: [0,0],
     swordjakubpuchatek: [0,1],
     wizard: [1,0],
+    normalskeleton: [1,1],
+    xskeleton: [0,2],
+    yskeleton: [1,2],
   });
   Crafty.sprite(60, "img/sprites60.png",{
-    skeleton: [0,0]
+    bigskeleton: [0,0]
+  });
+  Crafty.sprite(140, "img/sprites140.png",{
+    ironbars: [0,0]
   });
 
   function s2(){
@@ -90,6 +109,37 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
       cleardialog();
       objectiveid = "wizardobjective";
       objectivecompleted(objectiveid);
+    }
+  }
+
+  function caniopenbars(){
+    openbars++;
+    if(openbars==4){
+      ironbars.destroy();
+    }
+  }
+  function isnormalskeletondeadyet(){
+    if(normalskeletonhp<1){
+      caniopenbars();
+      normalskeleton.destroy()
+    }
+  }
+  function isbigskeletondeadyet(){
+    if(bigskeletonhp<1){
+      caniopenbars();
+      bigskeleton.destroy()
+    }
+  }
+  function isxskeletondeadyet(){
+    if(xskeletonhp<1){
+      caniopenbars();
+      xskeleton.destroy()
+    }
+  }
+  function isyskeletondeadyet(){
+    if(yskeletonhp<1){
+      caniopenbars();
+      yskeleton.destroy()
     }
   }
 
@@ -362,11 +412,11 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
     .attr({x:30, y:230, w: 700, h:50})
     .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"})
     .bind("EnterFrame", function(){
-      counter++;
-      if(counter>385){
+      acounter++;
+      if(acounter>385){
         Crafty.enterScene("second")
       }
-      if(counter>380){
+      if(acounter>380){
         clearobjectives();
       }
     })
@@ -412,10 +462,14 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
     }
 
     function generateEastWall(){
+      for(var j=37;j<40;j++){
       for(var i=0;i<25;i++){
+        if(i>9 && i<15){
+          continue;
+        }
         lavatype = Math.round(Math.random()+1)
         Crafty.e("2D, Canvas, Solid, Collision, lava"+lavatype)
-          .attr({x:780 , y:i*20})
+          .attr({x:j*20 , y:i*20})
           .checkHits("jakubpuchatek")
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
@@ -424,6 +478,28 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
           healthloss(damage);
           })
       }
+    }
+    }
+
+    function generateBridge(){
+      for(var j=37;j<40;j++){
+        for(var i=10; i<15;i++){
+          let bridgetype = Math.round(Math.random()+1)
+          Crafty.e("2D, Canvas, bridge"+bridgetype)
+          .attr({x:j*20, y:i*20})
+        }
+      }
+    }
+
+    function generateIronBars(){
+        ironbars = Crafty.e("2D, Canvas, Collision, Solid, ironbars")
+        .attr({x:720, y:180, w:20, h:140})
+        .collision()
+        .checkHits("jakubpuchatek")
+        .checkHits("swordjakubpuchatek")
+        .bind("HitOn", function(){
+          swordjakubpuchatek.x-=16;
+        })
     }
 
     function generateNorthWall(){
@@ -455,11 +531,27 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
       }
     }
 
+    function generateNextLevelTransition(){
+
+        Crafty.e("2D, Canvas, Solid, Collision")
+        .attr({x:780, y:200, w:10, h:100})
+        .collision()
+        .checkHits("swordjakubpuchatek")
+        .bind("HitOn", function(){
+          cleardialog();
+          clearobjectives();
+          Crafty.enterScene("skeletonkilled");
+        })
+    }
+
     generateWorld();
     generateWestWall();
     generateSouthWall();
     generateNorthWall();
     generateEastWall();
+    generateBridge();
+    generateIronBars();
+    generateNextLevelTransition();
 
 
     swordjakubpuchatek = Crafty.e("2D, Canvas, Fourway, Collision, Solid, swordjakubpuchatek")
@@ -467,18 +559,31 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
       .fourway(200)
       .collision()
       .checkHits("Solid")
-      .onHit("skeleton", function(){
-        let damage = 15
-        healthloss(damage);
+      .onHit("normalskeleton", function(){
+        normalskeletonhp-=20;
+        isnormalskeletondeadyet();
+      })
+      .onHit("bigskeleton", function(){
+        bigskeletonhp -=20;
+        isbigskeletondeadyet();
+      })
+      .onHit("xskeleton", function(){
+        xskeletonhp -=20;
+        isxskeletondeadyet();
+      })
+      .onHit("yskeleton", function(){
+        yskeletonhp-=20;
+        isyskeletondeadyet();
       })
 
       Crafty.bind("EnterFrame", function(){                    
-        counter++;
+        bcounter++;
         
-        if(counter>200){                     
+        if(bcounter>300){                     
           let los = Math.round(Math.random()*10);
-          if(los>8){
-            var medx = Math.floor((Math.random()*700)+50)
+          if(los>3 && medpackpickedup ==true){
+            medpackpickedup=false;
+            var medx = Math.floor((Math.random()*650)+50)
             var medy = Math.floor((Math.random()*400)+50)
             medpack = Crafty.e("2D, Canvas, Solid, Collision, medpack")
                 .attr({x: medx, y: medy, w:20, h:20})
@@ -489,36 +594,126 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
                     let damage = -25;
                     healthloss(damage);
                     medpack.destroy()
+                    medpackpickedup=true;
                   }
                   if(swordjakubpuchatekhp>75 && swordjakubpuchatekhp<100){
                     let damage = (100-swordjakubpuchatekhp)*-1
                     healthloss(damage);
                     medpack.destroy();
+                    medpackpickedup=true;
                   }
                 })
           }
-          counter=0;
+          bcounter=0;
+        }
+      })
+
+      Crafty.bind("EnterFrame", function(){
+        ccounter++
+        console.log(ccounter);
+        if(ccounter == 100 && swordjakubpuchatekhp <99){
+          console.log("aaaaaaa")
+          damage = -2;
+          healthloss(damage);
+        }
+        if(ccounter==100){
+          ccounter = 0;
         }
       })
       
       Crafty.bind("EnterFrame", function(){
         counterskel++;
-        if(counterskel>400 && skeletoncounter<4){
-          skeleton = Crafty.e("2D, Canvas, Solid, Collision, skeleton")
+        if(counterskel==400 && skeletoncounter<4){
+          xskeleton = Crafty.e("2D, Canvas, Solid, Collision, xskeleton")
           .checkHits("swordjakubpuchatek")
-          .attr({x:100, y:400, w:60, h:60})
+          .attr({x:100, y:400, w:40, h:40})
           .collision()
           .bind("HitOn",function(){
-            if(skeleton.x<swordjakubpuchatek.x){
+            if(xskeleton.x<swordjakubpuchatek.x){
               swordjakubpuchatek.x+=20
             }
-            if(skeleton.x>swordjakubpuchatek.x){
+            if(xskeleton.x>swordjakubpuchatek.x){
               swordjakubpuchatek.x-=20
             }
-            if(skeleton.y<swordjakubpuchatek.y){
+            if(xskeleton.y<swordjakubpuchatek.y){
               swordjakubpuchatek.y+=20
             }
-            if(skeleton.y>swordjakubpuchatek.y){
+            if(xskeleton.y>swordjakubpuchatek.y){
+              swordjakubpuchatek.y-=20
+            }
+            let damage = 15;
+            healthloss(damage);
+          })
+          skelspawned =true;
+          skeletoncounter++;
+        }
+
+        if(counterskel==800 && skeletoncounter<4){
+          normalskeleton = Crafty.e("2D, Canvas, Solid, Collision, normalskeleton")
+          .checkHits("swordjakubpuchatek")
+          .attr({x:700, y:100, w:40, h:40})
+          .collision()
+          .bind("HitOn",function(){
+            if(normalskeleton.x<swordjakubpuchatek.x){
+              swordjakubpuchatek.x+=20
+            }
+            if(normalskeleton.x>swordjakubpuchatek.x){
+              swordjakubpuchatek.x-=20
+            }
+            if(normalskeleton.y<swordjakubpuchatek.y){
+              swordjakubpuchatek.y+=20
+            }
+            if(normalskeleton.y>swordjakubpuchatek.y){
+              swordjakubpuchatek.y-=20
+            }
+            let damage = 20;
+            healthloss(damage);
+          })
+          skelspawned =true;
+          skeletoncounter++;
+        }
+
+        if(counterskel==1200 && skeletoncounter<4){
+          bigskeleton = Crafty.e("2D, Canvas, Solid, Collision, bigskeleton")
+          .checkHits("swordjakubpuchatek")
+          .attr({x:700, y:400, w:60, h:60})
+          .collision()
+          .bind("HitOn",function(){
+            if(bigskeleton.x<swordjakubpuchatek.x){
+              swordjakubpuchatek.x+=40
+            }
+            if(bigskeleton.x>swordjakubpuchatek.x){
+              swordjakubpuchatek.x-=40
+            }
+            if(bigskeleton.y<swordjakubpuchatek.y){
+              swordjakubpuchatek.y+=40
+            }
+            if(bigskeleton.y>swordjakubpuchatek.y){
+              swordjakubpuchatek.y-=40
+            }
+            let damage = 35;
+            healthloss(damage);
+          })
+          skelspawned =true;
+          skeletoncounter++;
+        }
+
+        if(counterskel==1600 && skeletoncounter<4){
+          yskeleton = Crafty.e("2D, Canvas, Solid, Collision, yskeleton")
+          .checkHits("swordjakubpuchatek")
+          .attr({x:100, y:50, w:40, h:40})
+          .collision()
+          .bind("HitOn",function(){
+            if(yskeleton.x<swordjakubpuchatek.x){
+              swordjakubpuchatek.x+=20
+            }
+            if(yskeleton.x>swordjakubpuchatek.x){
+              swordjakubpuchatek.x-=20
+            }
+            if(yskeleton.y<swordjakubpuchatek.y){
+              swordjakubpuchatek.y+=20
+            }
+            if(yskeleton.y>swordjakubpuchatek.y){
               swordjakubpuchatek.y-=20
             }
             let damage = 10;
@@ -526,30 +721,61 @@ var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co
           })
           skelspawned =true;
           skeletoncounter++;
-          counterskel=0;
         }
       })
+  
       Crafty.bind("EnterFrame", function(){
-        if(skelspawned==true){
-        if(swordjakubpuchatek.x-skeleton.x<0){
-          skeleton.x-=skeletonspeed;
-        }
-        else{
-          skeleton.x+=skeletonspeed;
-        }
-        if(swordjakubpuchatek.y-skeleton.y<0){
-          skeleton.y-=skeletonspeed;
-        }
-        else{
-          skeleton.y+=skeletonspeed;
-        }
-      }
-   })
-
-
-      
-
+          if(skelspawned==true){
+            if(skeletoncounter>1){
+              if(swordjakubpuchatek.x-normalskeleton.x<0){
+                normalskeleton.x-=normalskeletonspeed;
+              }
+              else{
+                normalskeleton.x+=normalskeletonspeed;
+              }
+              if(swordjakubpuchatek.y-normalskeleton.y<0){
+                normalskeleton.y-=normalskeletonspeed;
+              }
+              else{
+                normalskeleton.y+=normalskeletonspeed;
+              }
+            }
+            if(skeletoncounter>2){
+              if(swordjakubpuchatek.x-bigskeleton.x<0){
+                bigskeleton.x-=bigskeletonspeed;
+              }
+              else{
+                bigskeleton.x+=bigskeletonspeed;
+              }
+              if(swordjakubpuchatek.y-bigskeleton.y<0){
+                bigskeleton.y-=bigskeletonspeed;
+              }
+              else{
+                bigskeleton.y+=bigskeletonspeed;
+              }
+            }
+            if(skeletoncounter>0){
+              if(swordjakubpuchatek.x-xskeleton.x<0){
+                xskeleton.x-=xskeletonspeed;
+              }
+              else{
+                xskeleton.x+=xskeletonspeed;
+              }
+            }
+            if(skeletoncounter>3){
+              if(swordjakubpuchatek.y-yskeleton.y<0){
+                yskeleton.y-=yskeletonspeed;
+              }
+              else{
+                yskeleton.y+=yskeletonspeed;
+              }
+            }
+          }
+          })
+    
   })
+
+
   
   
   
