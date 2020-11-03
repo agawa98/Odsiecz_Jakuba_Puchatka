@@ -3,6 +3,7 @@ var bcounter = 0;
 var ccounter = 0;
 var dcounter = 0;
 var ecounter = 0;
+var fcounter = 0;
 var counterskel=0
 var skeletoncounter=0;
 var jakubpuchatekhp = 100;
@@ -23,7 +24,7 @@ var swordpickedup = false;
 var skelspawned= false;
 var medpackpickedup =true;
 var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co ty robisz z moimi gwiazdami??", "Czarodziej: Stój!!!!!", "Czarodziej: *sapie*"]
-var skeletontext = ["*kości stukają*", "Co ty tu robisz??", "Co zrobiłeś z Czarodziejem???"]
+var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkielet: Co zrobiłeś z Czarodziejem???"]
   Crafty.init(800, 500, document.getElementById("game"));
   
   Crafty.sprite(20, "img/sprites20.png",{
@@ -47,6 +48,18 @@ var skeletontext = ["*kości stukają*", "Co ty tu robisz??", "Co zrobiłeś z C
     lava2: [1,4],
     bridge1: [2,4],
     bridge2: [3,4],
+    lawn1: [0,5],
+    lawn2: [1,5],
+    lawn3: [2,5],
+    lawn4: [3,5],
+    lawn5: [0,6],
+    lawn6: [1,6],
+    fencehori: [2,6],
+    fencevert: [3,6],
+    fenceleftbot: [0,7],
+    fencelefttop: [1,7],
+    fencerighttop: [2,7],
+    fencerightbot: [3,7],
   });
   Crafty.sprite(40, "img/sprites40.png",{
     jakubpuchatek: [0,0],
@@ -119,13 +132,12 @@ var skeletontext = ["*kości stukają*", "Co ty tu robisz??", "Co zrobiłeś z C
     if(wizardhp<1){
       Crafty.enterScene("wizarddead");
       cleardialog();
-      objectiveid = "wizardobjective";
-      objectivecompleted(objectiveid);
+      objectivecompleted("wizardobjective");
     }
   }
 
   function caniopenbars(){
-    if(Math.round(Math.random()*4)>3){
+    if(Math.round(Math.random()*4)>1){
       newdialogbubble(skeletontext, 2);
     }
     openbars++;
@@ -189,6 +201,7 @@ var skeletontext = ["*kości stukają*", "Co ty tu robisz??", "Co zrobiłeś z C
   }
 
   Crafty.scene("introduction", function(){
+    Crafty.background("#158f1b")
     Crafty.e("2D, DOM, Text")
     .text("Po tym, jak Kłapouchy okazał się agentem KGB, który miał na celu eksterminację wszystkich obywateli Stumilowego Lasu, Jakub Puchatek miał już dość tych zdradzieckich rusków.")
     .attr({x:30, y:230, w: 700, h:50})
@@ -199,9 +212,15 @@ var skeletontext = ["*kości stukają*", "Co ty tu robisz??", "Co zrobiłeś z C
         Crafty.enterScene("introduction2")
       }
     })
+    .bind("KeyDown", function(e){
+      if(e.key == Crafty.keys.SPACE){
+        dcounter = 399;
+      }
+    })
   })
 
   Crafty.scene("introduction2", function(){
+    Crafty.background("#168250")
     Crafty.e("2D, DOM, Text")
     .text("Zaraz po pogrzebie Krzysia wyruszył w podróż do filii rosyjskiej agencji niecałe 2500km stąd. Pierwszą przeszkodę spotkał jeszcze w swoim rodzimym lesie.")
     .attr({x:30, y:230, w: 700, h:50})
@@ -212,7 +231,13 @@ var skeletontext = ["*kości stukają*", "Co ty tu robisz??", "Co zrobiłeś z C
         Crafty.enterScene("first")
       }
     })
+    .bind("KeyDown", function(e){
+      if(e.key == Crafty.keys.SPACE){
+        ecounter = 399;
+      }
+    })
   })
+
 
 
 
@@ -453,7 +478,7 @@ var skeletontext = ["*kości stukają*", "Co ty tu robisz??", "Co zrobiłeś z C
     Crafty.background("green");
     Crafty.e("Text, 2D, DOM")
     .text("Brawo, rozgromiłeś Czarodzieja! Przeszukując jego zwłoki w poszukiwaniu magicznych przedmiotów, natrafiasz na błyszczący pierścień. Po założeniu go na palec przenosi cię on do komnaty Czarodzieja...")
-    .attr({x:30, y:130, w: 700, h:50})
+    .attr({x:30, y:170, w: 700, h:50})
     .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"})
     .bind("EnterFrame", function(){
       acounter++;
@@ -464,7 +489,13 @@ var skeletontext = ["*kości stukają*", "Co ty tu robisz??", "Co zrobiłeś z C
         clearobjectives();
       }
     })
+    .bind("KeyDown", function(e){
+      if(e.key == Crafty.keys.SPACE){
+        acounter = 248;
+      }
+    })
   })
+  
 
 
 
@@ -810,6 +841,113 @@ var skeletontext = ["*kości stukają*", "Co ty tu robisz??", "Co zrobiłeś z C
           })
     
   })
+
+  Crafty.scene("skeletonkilled", function(){
+    Crafty.background("#411561");
+    Crafty.e("Text, 2D, DOM")
+    .text("Wychodząc z jaskini natknąłęś się na przyjazną osadę krasnoludków ogrodowych. Myślisz sobie, że już nic cię nie zaskoczy...")
+    .attr({x:30, y:230, w: 700, h:50})
+    .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"})
+    .bind("EnterFrame",function(){
+      fcounter++
+      if(fcounter=300){
+        Crafty.enterScene("third")
+      }
+    })
+    .bind("KeyDown", function(e){
+      if(e.key == Crafty.keys.SPACE){
+        fcounter = 299;
+      }
+    })
+  })
+
+
+
+  Crafty.scene("third", function(){
+    function generateWorld() {
+      for (var i = 0; i < 40; i++) {
+        for (var j = 0; j < 25; j++) {
+          var los=Math.round(Math.random()*100);
+          if(los>92){
+           lawntype = Math.floor((Math.random()*6)+2)
+           Crafty.e("2D, Canvas, Color, cave"+cavetype)
+            .attr({x: i * 20, y: j * 20})
+            .color("none");
+          }
+          else{
+            Crafty.e("2D, Canvas, Color, cave1")
+              .attr({x: i * 20, y: j * 20})
+              .color("none");
+        }
+      }
+      }
+    }
+  
+    function generateWestWall(){
+      for(var i=0;i<25;i++){
+        lavatype = Math.round(Math.random()+1)
+        Crafty.e("2D, Canvas, Solid, Collision, lava"+lavatype)
+          .attr({x:0 , y:i*20})
+          .checkHits("swordjakubpuchatek")
+          .bind("HitOn", function(){
+          swordjakubpuchatek.x+=12;
+          healthloss(20);
+          })
+      }
+    }
+
+    function generateEastWall(){
+      for(var j=37;j<40;j++){
+      for(var i=0;i<25;i++){
+        if(i>9 && i<15){
+          continue;
+        }
+        lavatype = Math.round(Math.random()+1)
+        Crafty.e("2D, Canvas, Solid, Collision, lava"+lavatype)
+          .attr({x:j*20 , y:i*20})
+          .checkHits("jakubpuchatek")
+          .checkHits("swordjakubpuchatek")
+          .bind("HitOn", function(){
+          swordjakubpuchatek.x-=12;
+          healthloss(20);
+          })
+      }
+    }
+    }
+    function generateNorthWall(){
+      for(var i=0;i<40;i++){
+        lavatype = Math.round(Math.random()+1)
+        Crafty.e("2D, Canvas, Solid, Collision, lava"+lavatype)
+          .attr({x:20*i , y:0})
+          .checkHits("jakubpuchatek")
+          .checkHits("swordjakubpuchatek")
+          .bind("HitOn", function(){
+          swordjakubpuchatek.y+=12;
+          healthloss(20);
+          })
+      }
+    }
+
+    function generateSouthWall(){
+      for(var i=0;i<40;i++){
+        lavatype = Math.round(Math.random()+1)
+        Crafty.e("2D, Canvas, Solid, Collision, lava"+lavatype)
+          .attr({x:i*20 , y:480})
+          .checkHits("swordjakubpuchatek")
+          .bind("HitOn", function(){
+          swordjakubpuchatek.y-=12; 
+          healthloss(20);
+          })
+      }
+    }
+
+    generateWorld();
+    generateEastWall();
+    generateWestWall();
+    generateNorthWall();
+    generateSouthWall();
+  })
+
 
 
   
