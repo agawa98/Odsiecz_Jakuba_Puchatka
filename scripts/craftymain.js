@@ -1,13 +1,18 @@
-var acounter = 0
+var acounter = 0;
 var bcounter = 0;
 var ccounter = 0;
 var dcounter = 0;
 var ecounter = 0;
 var fcounter = 0;
+var gcounter = 0;
+var hcounter = 0;
 var counterskel=0
 var skeletoncounter=0;
 var jakubpuchatekhp = 100;
 var swordjakubpuchatekhp=100;
+var swordjakubpuchatekspeed=1;
+var healthregentimeout = 50;
+var damagemultiplier=1;
 var wizardhp = 150;
 var starcounter = 0;
 var wizardspeed =.5;
@@ -23,6 +28,8 @@ var openbars =0;
 var swordpickedup = false;
 var skelspawned= false;
 var medpackpickedup =true;
+var skelpassed=false;
+var wellchoicehasbeenmade=false;
 var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co ty robisz z moimi gwiazdami??", "Czarodziej: Stój!!!!!", "Czarodziej: *sapie*"]
 var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkielet: Co zrobiłeś z Czarodziejem???"]
   Crafty.init(800, 500, document.getElementById("game"));
@@ -70,14 +77,17 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
     yskeleton: [1,2],
   });
   Crafty.sprite(60, "img/sprites60.png",{
-    bigskeleton: [0,0]
+    bigskeleton: [0,0],
+    wishingwell: [1,0]
   });
   Crafty.sprite(140, "img/sprites140.png",{
-    ironbars: [0,0]
+    ironbars: [0,0],
+    house: [1,0]
   });
 
-  function s2(){
-    Crafty.enterScene("second");
+  function op(){
+    starcounter=10;
+    openbars=4;
   }
 
 
@@ -141,7 +151,8 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
       newdialogbubble(skeletontext, 2);
     }
     openbars++;
-    if(openbars==4){
+    if(openbars>3){
+      skelpassed=true;
       ironbars.destroy();
       objectivecompleted("skeletonobjective");
     }
@@ -198,6 +209,62 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
 
   function clearobjectives(){
     $(".objective").remove();
+  }
+
+  function healthregen(){
+      ccounter++
+      if(ccounter == healthregentimeout && swordjakubpuchatekhp <99){
+        healthloss(-2);
+      }
+      if(ccounter==100){
+        ccounter = 0;
+      }
+  }
+
+  document.getElementById("wellbtn").addEventListener("click", function(event){
+    event.preventDefault();
+    wellwished();
+  })
+
+  function wellwished(){
+    if(document.getElementById("biggerhealth").checked){
+      healthregentimeout=50;
+      villageburnedtext = "Pełen sił idziesz przed siebie w kierunku Moskwy."
+    }
+    if(document.getElementById("biggersword").checked){
+      damagemultiplier = 2;
+      villageburnedtext = "Z podwójnie śmiertelnym mieczem biegniesz dalej w kierunku Moskwy."
+    }
+    wellchoicehasbeenmade=true;
+    objectivecompleted("wellobjective")
+    document.getElementById("wellchoice").style.visibility = "hidden"
+  }
+
+  function spawnmedpack(){
+    let los = Math.round(Math.random()*10);
+          if(los>3 && medpackpickedup ==true){
+            medpackpickedup=false;
+            var medx = Math.floor((Math.random()*650)+50)
+            var medy = Math.floor((Math.random()*400)+50)
+            medpack = Crafty.e("2D, Canvas, Solid, Collision, medpack")
+                .attr({x: medx, y: medy, w:20, h:20})
+                .checkHits("swordjakubpuchatek")
+                .collision()
+                .bind("HitOn", function(){
+                  if(swordjakubpuchatekhp<76){
+                    healthloss(-25);
+                    medpack.destroy()
+                    medpackpickedup=true;
+                  }
+                  if(swordjakubpuchatekhp>75 && swordjakubpuchatekhp<100){
+                    let damage = (100-swordjakubpuchatekhp)*-1
+                    healthloss(damage);
+                    medpack.destroy();
+                    medpackpickedup=true;
+                  }
+                })
+          }
+          bcounter=0;
   }
 
   Crafty.scene("introduction", function(){
@@ -612,6 +679,8 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
           cleardialog();
           clearobjectives();
           Crafty.enterScene("skeletonkilled");
+          let swjphp = -1*(100-swordjakubpuchatekhp)
+        healthloss(swjphp)
         })
     }
 
@@ -654,45 +723,15 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
         bcounter++;
         
         if(bcounter>300){                     
-          let los = Math.round(Math.random()*10);
-          if(los>3 && medpackpickedup ==true){
-            medpackpickedup=false;
-            var medx = Math.floor((Math.random()*650)+50)
-            var medy = Math.floor((Math.random()*400)+50)
-            medpack = Crafty.e("2D, Canvas, Solid, Collision, medpack")
-                .attr({x: medx, y: medy, w:20, h:20})
-                .checkHits("swordjakubpuchatek")
-                .collision()
-                .bind("HitOn", function(){
-                  if(swordjakubpuchatekhp<76){
-                    healthloss(-25);
-                    medpack.destroy()
-                    medpackpickedup=true;
-                  }
-                  if(swordjakubpuchatekhp>75 && swordjakubpuchatekhp<100){
-                    let damage = (100-swordjakubpuchatekhp)*-1
-                    healthloss(damage);
-                    medpack.destroy();
-                    medpackpickedup=true;
-                  }
-                })
-          }
-          bcounter=0;
+          spawnmedpack()
         }
       })
 
-      Crafty.bind("EnterFrame", function(){
-        ccounter++
-        if(ccounter == 100 && swordjakubpuchatekhp <99){
-          healthloss(-2);
-        }
-        if(ccounter==100){
-          ccounter = 0;
-        }
-      })
+      Crafty.bind("EnterFrame", healthregen())
       
       Crafty.bind("EnterFrame", function(){
         counterskel++;
+        if(skelpassed==false){
         if(counterskel==400 && skeletoncounter<4){
           xskeleton = Crafty.e("2D, Canvas, Solid, Collision, xskeleton")
           .checkHits("swordjakubpuchatek")
@@ -789,6 +828,7 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
           skelspawned =true;
           skeletoncounter++;
         }
+      }
       })
   
       Crafty.bind("EnterFrame", function(){
@@ -843,9 +883,10 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
   })
 
   Crafty.scene("skeletonkilled", function(){
+    medpackpickedup=false;
     Crafty.background("#411561");
     Crafty.e("Text, 2D, DOM")
-    .text("Wychodząc z jaskini natknąłęś się na przyjazną osadę krasnoludków ogrodowych. Myślisz sobie, że już nic cię nie zaskoczy...")
+    .text("Wychodząc z jaskini natknąłęś się na opuszczoną osadę ze studnią na środku.")
     .attr({x:30, y:230, w: 700, h:50})
     .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"})
     .bind("EnterFrame",function(){
@@ -863,19 +904,34 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
 
 
 
+
+
   Crafty.scene("third", function(){
+
+
+    newtask("Wybierz życzenie w studni", "wellobjective")
+
+
     function generateWorld() {
       for (var i = 0; i < 40; i++) {
         for (var j = 0; j < 25; j++) {
           var los=Math.round(Math.random()*100);
-          if(los>92){
-           lawntype = Math.floor((Math.random()*6)+2)
-           Crafty.e("2D, Canvas, Color, cave"+cavetype)
+          
+          if(los>98){
+           lawntype = Math.round((Math.random()*2)+3)
+           Crafty.e("2D, Canvas, Color, lawn"+lawntype)
+            .attr({x: i * 20, y: j * 20})
+            .color("none");
+            console.log(lawntype)
+          }
+          if(los>90 && los<=98){
+          lawntype = Math.round(Math.random()+1)
+           Crafty.e("2D, Canvas, Color, lawn"+lawntype)
             .attr({x: i * 20, y: j * 20})
             .color("none");
           }
-          else{
-            Crafty.e("2D, Canvas, Color, cave1")
+          if(los<=90){
+            Crafty.e("2D, Canvas, Color, lawn6")
               .attr({x: i * 20, y: j * 20})
               .color("none");
         }
@@ -886,68 +942,169 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
     function generateWestWall(){
       for(var i=0;i<25;i++){
         lavatype = Math.round(Math.random()+1)
-        Crafty.e("2D, Canvas, Solid, Collision, lava"+lavatype)
+        Crafty.e("2D, Canvas, Solid, Collision, fencevert")
           .attr({x:0 , y:i*20})
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.x+=12;
-          healthloss(20);
           })
       }
     }
 
     function generateEastWall(){
-      for(var j=37;j<40;j++){
       for(var i=0;i<25;i++){
         if(i>9 && i<15){
           continue;
         }
         lavatype = Math.round(Math.random()+1)
-        Crafty.e("2D, Canvas, Solid, Collision, lava"+lavatype)
-          .attr({x:j*20 , y:i*20})
+        Crafty.e("2D, Canvas, Solid, Collision, fencevert")
+          .attr({x:780 , y:i*20})
           .checkHits("jakubpuchatek")
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.x-=12;
-          healthloss(20);
           })
       }
     }
-    }
     function generateNorthWall(){
-      for(var i=0;i<40;i++){
+      for(var i=1;i<39;i++){
         lavatype = Math.round(Math.random()+1)
-        Crafty.e("2D, Canvas, Solid, Collision, lava"+lavatype)
+        Crafty.e("2D, Canvas, Solid, Collision, fencehori")
           .attr({x:20*i , y:0})
-          .checkHits("jakubpuchatek")
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.y+=12;
-          healthloss(20);
           })
       }
+      Crafty.e("2D, Canvas, Solid, Collision, fencerighttop")
+        .attr({x:780, y:0})
+      Crafty.e("2D, Canvas, Solid, Collision, fencelefttop")
+        .attr({x:0, y:0})
+
     }
 
     function generateSouthWall(){
-      for(var i=0;i<40;i++){
+      for(var i=1;i<39;i++){
         lavatype = Math.round(Math.random()+1)
-        Crafty.e("2D, Canvas, Solid, Collision, lava"+lavatype)
+        Crafty.e("2D, Canvas, Solid, Collision, fencehori")
           .attr({x:i*20 , y:480})
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.y-=12; 
-          healthloss(20);
           })
       }
+      Crafty.e("2D, Canvas, Solid, Collision, fencerightbot")
+        .attr({x:780, y:480})
+      Crafty.e("2D, Canvas, Solid, Collision, fenceleftbot")
+        .attr({x:0, y:480})
     }
+
+    function generateHouses(){
+      var house = Crafty.e("2D, Canvas, Solid, Collision, house")
+        .attr({x:400, y:0})
+        .collision()
+        .checkHits("swordjakubpuchatek")
+        .bind("HitOn",function(){
+            if(house.x<swordjakubpuchatek.x){
+              swordjakubpuchatek.x+=20
+            }
+            if(house.x>swordjakubpuchatek.x){
+              swordjakubpuchatek.x-=20
+            }
+            if(house.y<swordjakubpuchatek.y){
+              swordjakubpuchatek.y+=20
+            }
+            if(house.y>swordjakubpuchatek.y){
+              swordjakubpuchatek.y-=20
+            }
+
+    })
+    }
+
+    function generateNextLevelTransition(){
+
+      Crafty.e("2D, Canvas, Solid, Collision")
+      .attr({x:780, y:200, w:10, h:100})
+      .collision()
+      .checkHits("swordjakubpuchatek")
+      .bind("HitOn", function(){
+        cleardialog();
+        clearobjectives();
+        Crafty.enterScene("villageburned");
+        let swjphp = -1*(100-swordjakubpuchatekhp)
+      healthloss(swjphp)
+      })
+     }
 
     generateWorld();
     generateEastWall();
     generateWestWall();
     generateNorthWall();
     generateSouthWall();
+    generateHouses();
+    generateNextLevelTransition();
+
+    var swordjakubpuchatek = Crafty.e("2D, Canvas, Fourway, Collision, Solid, swordjakubpuchatek")
+    .attr({x:70, y:200})
+    .fourway(200)
+    .collision()
+    .checkHits("Solid")
+
+    var wishingwell = Crafty.e("2D, Canvas, Solid, Collision, wishingwell")
+    .attr({x:570, y:220})
+    .collision()
+    .checkHits("Solid")
+    .bind("HitOn",function(){
+      if(wishingwell.x<swordjakubpuchatek.x){
+        swordjakubpuchatek.x+=12
+      }
+      if(wishingwell.x>swordjakubpuchatek.x){
+        swordjakubpuchatek.x-=12
+      }
+      if(wishingwell.y<swordjakubpuchatek.y){
+        swordjakubpuchatek.y+=12
+      }
+      if(wishingwell.y>swordjakubpuchatek.y){
+        swordjakubpuchatek.y-=12
+      } 
+      if(wellchoicehasbeenmade == false){
+        document.getElementById("wellchoice").style.visibility = "visible";
+
+       
+      }
+      
+
+    })
+
+
   })
 
+
+
+  Crafty.scene("villageburned",function(){
+    Crafty.background("#411561");
+    Crafty.e("Text, 2D, DOM")
+    .text(villageburnedtext)
+    .attr({x:30, y:230, w: 700, h:50})
+    .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"})
+    .bind("EnterFrame",function(){
+      hcounter++
+      if(hcounter=300){
+        Crafty.enterScene("fourth")
+      }
+    })
+    .bind("KeyDown", function(e){
+      if(e.key == Crafty.keys.SPACE){
+        fcounter = 299;
+      }
+    })
+  })
+
+
+
+  Crafty.scene("fourth",function(){
+    
+  })
 
 
   

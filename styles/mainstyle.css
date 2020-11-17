@@ -71,3 +71,12 @@ body{
     color: rgb(0, 0, 0);
     text-shadow: -1px -1px 0 rgb(255, 255, 255), 1px -1px 0 rgb(255, 255, 255), -1px 1px 0 rgb(255, 255, 255), 1px 1px 0 rgb(255, 255, 255);
 }
+#wellchoice{
+    position: absolute;
+    left:550px;
+    top:550px;
+    visibility: hidden;
+}
+#wellbtn{
+    text-align:center;
+}
