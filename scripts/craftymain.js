@@ -8,7 +8,7 @@ var gcounter = 0
 var hcounter = 0;
 var icounter = 0
 var jcounter = 0;
-var kcounter=0;
+var kcounter = 0;
 var counterskel=0
 var skeletoncounter=0;
 var jakubpuchatekhp = 100;
@@ -93,7 +93,9 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
     vinec1: [2,10],
     vinec2: [3,10],
     miodek: [0,11],
-    cobra: [0,12]
+    cobra: [0,12],
+    bombpickup: [2,12],
+
 
   });
   Crafty.sprite(40, "img/sprites40.png",{
@@ -112,6 +114,9 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
     ironbars: [0,0],
     house: [1,0]
   });
+  Crafty.sprite(300, "img/sprites300.png"),{
+    bombready:[0,0]
+  }
 
   function op(){
     starcounter=10;
@@ -1302,14 +1307,11 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
       console.log(gcounter+"      counter")
       console.log(swordjakubpuchatekhp+"     hp")
       console.log(venomduration + "     venomdur")
-      if(gcounter=55){
-        for(venomduration;venomduration>0;venomduration--){
-          kcounter++;
-          if(kcounter>0){
-            healthloss(7);
-            kcounter=0
-          }
-          
+      if(gcounter>55){
+        if(venomduration>0){
+          venomduration--;
+          healthloss(8);
+          gcounter=0;
         }
       }
     })
@@ -1353,7 +1355,7 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
     })
     .onHit("enemy",function(){
       if(jcounter>70){
-        venomduration +=5;
+        venomduration +=3;
         jcounter=0;
       }
     })
@@ -1373,7 +1375,6 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
     })
     .onHit("swordjakubpuchatek", function(){
       cobra1tookdamage(damagemultiplier*20)
-      venomduration+=5;
       if(cobra1.x<swordjakubpuchatek.x){
         swordjakubpuchatek.x+=12
       }
@@ -1414,7 +1415,6 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
     })
     .onHit("swordjakubpuchatek", function(){
       cobra2tookdamage(damagemultiplier*20)
-      venomduration+=5;
       if(cobra2.x<swordjakubpuchatek.x){
         swordjakubpuchatek.x+=12
       }
@@ -1455,7 +1455,6 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
     })
     .onHit("swordjakubpuchatek", function(){
       cobra3tookdamage(damagemultiplier*20)
-      venomduration+=5;
       if(cobra3.x<swordjakubpuchatek.x){
         swordjakubpuchatek.x+=12
       }
