@@ -10,6 +10,10 @@ var icounter = 0
 var jcounter = 0;
 var kcounter = 0;
 var lcounter = 0;
+var mcounter = 0;
+var ncounter = 0;
+var ocounter = 0;
+var pcounter = 0;
 var counterskel=0
 var skeletoncounter=0;
 var jakubpuchatekhp = 100;
@@ -32,6 +36,18 @@ var bomblont = 0
 var openbars =0;
 var miodekcooldown = 0;
 var lastfacingdirection=0;
+var addspeed = 0.3;
+var cobra1hp = 100;
+var cobra2hp = 100;
+var cobra3hp = 100;
+var cobra1speed = 2;
+var cobra2speed = 3;
+var cobra3speed = 4;
+var venomduration = 0;
+var ninjaspeed = 3;
+var ninjatargetx = 100
+var ninjatargety = 400
+var ninjahp = 100;
 var swordpickedup = false;
 var skelspawned= false;
 var medpackpickedup =true;
@@ -40,19 +56,16 @@ var wellchoicehasbeenmade=false;
 var bombpickedup = false;
 var bombspawned = false;
 var someonewashurt = false;
-var cobra1hp = 100;
-var cobra2hp = 100;
-var cobra3hp = 100;
-var cobra1speed = 2;
-var cobra2speed = 3;
-var cobra3speed = 4;
-var venomduration = 0;
+var venomresist = false;
 var villageburnedtext = "Ta wioska wyglądała podejrzanie więc wybiegłeś stamtąd jak najszybciej nawet nie patrząc na studnię"
 var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co ty robisz z moimi gwiazdami??", "Czarodziej: Stój!!!!!", "Czarodziej: *sapie*"]
 var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkielet: Co zrobiłeś z Czarodziejem???"]
+var bombtut = ["Kliknij O aby podłożyć bombę (najpierw musisz ją zebrać)"]
+var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
   Crafty.init(800, 500, document.getElementById("game"));
   
   Crafty.sprite(20, "img/sprites20.png",{
+    void: [111,11111],
     grass1: [0,0],
     grass2: [1,0],
     grass3: [2,0],
@@ -100,7 +113,16 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
     miodek: [0,11],
     cobra: [0,12],
     bombpickup: [2,12],
-
+    sandcrack1: [0,13],
+    sandcrack2: [1,13],
+    concretedef: [0,14],
+    concrete1: [1,14],
+    concrete2: [2,14],
+    concrete3: [3,14],
+    concrete4: [0,15],
+    stripe: [1,15],
+    curb1: [2,15],
+    curb2: [3,15],
 
   });
   Crafty.sprite(40, "img/sprites40.png",{
@@ -110,6 +132,7 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
     normalskeleton: [1,1],
     xskeleton: [0,2],
     yskeleton: [1,2],
+    ninja: [0,3]
   });
   Crafty.sprite(60, "img/sprites60.png",{
     bigskeleton: [0,0],
@@ -117,7 +140,8 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
   });
   Crafty.sprite(140, "img/sprites140.png",{
     ironbars: [0,0],
-    house: [1,0]
+    house: [1,0],
+    
   });
   Crafty.sprite(300, "img/sprites300.png",{
     bombready: [0,0],
@@ -127,6 +151,7 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
     starcounter=10;
     openbars=4;
     counterskel = 390;
+    venomresist = true;
   }
 
 
@@ -345,6 +370,13 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
     cobra3hp-=dmg;
     if(cobra3hp<1){
       cobra3.destroy()
+    }
+  }
+
+  function isninjadeadyet(){
+    if(ninjahp<1){
+      objectivecompleted("killninja")
+      ninja.destroy()
     }
   }
 
@@ -779,6 +811,8 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
 
     newtask("Zabij cztery szkielety aby móc otworzyć bramę!", "skeletonobjective");
 
+    newdialogbubble(bombtut, 0)
+
     Crafty.bind("EnterFrame",function(){
       lcounter++
       if(lcounter==500){
@@ -807,6 +841,10 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
             bombarmed.destroy();
           }
           if(bomblont==200){
+              if(swordjakubpuchatek.x > bombarmed.x && swordjakubpuchatek.x < bombarmed.x+300 && swordjakubpuchatek.y > bombarmed.y && swordjakubpuchatek.y < bombarmed.y+300){
+                healthloss(20)
+                someonewashurt=true
+            }
             if(counterskel>400){
               if(xskeleton.x > bombarmed.x && xskeleton.x < bombarmed.x+300 && xskeleton.y > bombarmed.y && xskeleton.y < bombarmed.y+300){
                 xskeletonhp-=50;
@@ -1359,11 +1397,60 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
         .attr({x:0, y:480})
     }
 
+    function generateObstacleWall1(){
+      for(var i=0;i<20;i++){
+        cracktype = Math.round(Math.random()+1)
+        Crafty.e("2D, Canvas, Solid, Collision, sandcrack"+cracktype)
+          .attr({x:650 , y:i*20})
+          .checkHits("swordjakubpuchatek")
+          .bind("HitOn", function(){
+          swordjakubpuchatek.x-=22;
+          healthloss(5)
+          })
+      }
+    }
+
+    function generateObstacleWall2(){
+      for(var i=5;i<25;i++){
+        cracktype = Math.round(Math.random()+1)
+        Crafty.e("2D, Canvas, Solid, Collision, sandcrack"+cracktype)
+          .attr({x:500 , y:i*20})
+          .checkHits("swordjakubpuchatek")
+          .bind("HitOn", function(){
+          swordjakubpuchatek.x-=22;
+          healthloss(5)
+          })
+      }
+    }
+
+    function generateNextLevelTransition(){
+
+      Crafty.e("2D, Canvas, Solid, Collision")
+      .attr({x:780, y:200, w:10, h:100})
+      .collision()
+      .checkHits("swordjakubpuchatek")
+      .bind("HitOn", function(){
+        cleardialog();
+        clearobjectives();
+        Crafty.enterScene("snakesescaped");
+        let swjphp = -1*(100-swordjakubpuchatekhp)
+      healthloss(swjphp)
+      })
+     }
+
+
     generateWorld();
     generateEastWall();
     generateWestWall();
     generateSouthWall();
     generateNorthWall();
+    generateObstacleWall1();
+    generateObstacleWall2();
+    generateNextLevelTransition();
+
+    newtask("Obroń się przed żmijami!!!!!")
+
+    newdialogbubble(miodektut, 0)
 
     Crafty.bind("EnterFrame", function(){
       healthregen();
@@ -1399,15 +1486,38 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
     .bind("EnterFrame",function(){
       miodekcooldown++
       gcounter++;
-      console.log(gcounter+"      counter")
-      console.log(swordjakubpuchatekhp+"     hp")
-      console.log(venomduration + "     venomdur")
-      if(gcounter>55){
-        if(venomduration>0){
+      jcounter++;
+        if(venomduration>0 && gcounter>40 && venomresist==false){
           venomduration--;
-          healthloss(8);
+          healthloss(10);
           gcounter=0;
-        }
+          los = Math.round(Math.random()*3)
+          console.log("los"+los)
+          console.log("venom"+venomduration)
+          Crafty.bind("EnterFrame",function(){
+            mcounter++;
+            if(los==0){
+              swordjakubpuchatek.x+=addspeed;
+              console.log(addspeed)
+            }
+            if(los==1){
+              swordjakubpuchatek.x-=addspeed;
+              console.log(addspeed)
+            }
+            if(los==2){
+              swordjakubpuchatek.y+=addspeed;
+              console.log(addspeed)
+            }
+            if(los==3){
+              swordjakubpuchatek.y-=addspeed;
+              console.log(addspeed)
+            }
+            if(mcounter>40){
+              addspeed=0;
+              mcounter=0;
+              addspeed+=0.3;
+            }
+          })
       }
     })
     .bind("KeyDown", function(e){
@@ -1449,8 +1559,8 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
       
     })
     .onHit("enemy",function(){
-      if(jcounter>70){
-        venomduration +=3;
+      if(jcounter>40){
+        venomduration +=5;
         jcounter=0;
       }
     })
@@ -1503,7 +1613,7 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
     .attr({x:710, y: 250})
     .collision()
     .checkHits("Solid")
-    .reel("cobramove", 2000, 0, 12, 2)
+    .reel("cobramove", 1200, 0, 12, 2)
     .animate("cobramove", -1)
     .onHit("miodek", function(){
       cobra2tookdamage(10)
@@ -1543,7 +1653,7 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
     .attr({x:710, y: 440})
     .collision()
     .checkHits("Solid")
-    .reel("cobramove", 2000, 0, 12, 2)
+    .reel("cobramove", 400, 0, 12, 2)
     .animate("cobramove", -1)
     .onHit("miodek", function(){
       cobra3tookdamage(10)
@@ -1579,6 +1689,8 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
     })
 
     
+
+    
       
     
     
@@ -1590,6 +1702,242 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
 
 
   })
+
+  Crafty.scene("snakesescaped",function(){
+
+      Crafty.background("#411561");
+      Crafty.e("Text, 2D, DOM")
+      .text("Po ciężkiej przeprawie przez haszcze jesteś zdumiony, że jeszcze żyjesz. Wiesz, że nie zostało ci wiele kilometrów do celu.")
+      .attr({x:30, y:230, w: 700, h:50})
+      .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"})
+      .bind("EnterFrame",function(){
+        ncounter++
+        if(ncounter==300){
+          Crafty.enterScene("prefifth")
+        }
+      })
+      .bind("KeyDown", function(e){
+        if(e.key == Crafty.keys.SPACE){
+          ncounter = 299;
+        }
+      })
+    })
+
+    Crafty.scene("prefifth",function(){
+
+      Crafty.background("red");
+      Crafty.e("Text, 2D, DOM")
+      .text("W końcu dotarłeś do celu, Siedziby KGB. Na parkingu przed wejściem jednak spotykasz przebiegłego skurczybyka ninje ruska z nieziemskimi supermocami")
+      .attr({x:30, y:230, w: 700, h:50})
+      .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"})
+      .bind("EnterFrame",function(){
+        ncounter++
+        if(ncounter==300){
+          Crafty.enterScene("fifth")
+        }
+      })
+      .bind("KeyDown", function(e){
+        if(e.key == Crafty.keys.SPACE){
+          ncounter = 299;
+        }
+      })
+    })
+
+    Crafty.scene("fifth", function(){
+
+      function generateWorld() {
+        for (var i = 0; i < 40; i++) {
+          for (var j = 0; j < 25; j++) {
+            var los=Math.round(Math.random()*100);
+            
+            if(los>98){
+             concretetype = Math.ceil(Math.random()*4)
+             Crafty.e("2D, Canvas, Color, concrete"+concretetype)
+              .attr({x: i * 20, y: j * 20})
+              .color("none");
+            }
+            if(los<=98){
+              Crafty.e("2D, Canvas, Color, concretedef")
+                .attr({x: i * 20, y: j * 20})
+                .color("none");
+          }
+        }
+        }
+      }
+    
+      function generateWestWall(){
+        for(var i=0;i<25;i++){
+          console.log("west")
+          Crafty.e("2D, Canvas, Solid, Collision, void")
+            .collision()
+            .attr({x:0 , y:i*20})
+            .checkHits("swordjakubpuchatek")
+            .onHit("ninja",function(){
+              ninja.x+=12; 
+            })
+            .onHit("swordjakubpuchatek",function(){
+              swordjakubpuchatek.x+=12; 
+            })
+        }
+      }
+  
+      function generateEastWall(){
+        for(var i=0;i<25;i++){
+          console.log("east")
+          Crafty.e("2D, Canvas, Solid, Collision, void")
+            .collision()
+            .attr({x:780 , y:i*20})
+            .checkHits("swordjakubpuchatek")
+            .onHit("ninja",function(){
+              ninja.x-=12; 
+            })
+            .onHit("swordjakubpuchatek",function(){
+              swordjakubpuchatek.x-=12; 
+            })
+        }
+      }
+      function generateNorthWall(){
+        for(var i=0;i<41;i++){
+          console.log("north")
+          curbtype = Math.round(Math.random()+1)
+          Crafty.e("2D, Canvas, Solid, Collision, curb"+ curbtype)
+            .collision()
+            .attr({x:20*i , y:0})
+            .checkHits("swordjakubpuchatek")
+            .onHit("ninja",function(){
+              ninja.y+=12; 
+            })
+            .onHit("swordjakubpuchatek",function(){
+              swordjakubpuchatek.y+=12; 
+            })
+        }
+      }
+  
+      function generateSouthWall(){
+        for(var i=1;i<39;i++){
+          console.log("south")
+          Crafty.e("2D, Canvas, Solid, Collision, void")
+            .collision()
+            .attr({x:i*20 , y:480})
+            .checkHits("swordjakubpuchatek")
+            .onHit("ninja",function(){
+              ninja.y-=12; 
+            })
+            .onHit("swordjakubpuchatek",function(){
+              swordjakubpuchatek.y-=12; 
+            })
+        }
+      }
+
+      function generateStripes(){
+
+        for(var j=1;j<25;j++){
+          if(j>7 && j<18){
+            continue
+          }
+          for(var i=2;i<40;i+=5){
+            console.log("sssssss")
+            Crafty.e("2D, Canvas, Color, stripe")
+              .attr({x:i*20 , y:j*20})
+              .color("none")
+          }
+        }
+      }
+
+      generateWorld()
+      generateEastWall()
+      generateNorthWall()
+      generateWestWall()
+      generateSouthWall()
+      generateStripes()
+
+      newtask("Pokonaj ruskiego agenta", "killninja")
+
+      var swordjakubpuchatek = Crafty.e("2D, Canvas, Fourway, Collision, Solid, swordjakubpuchatek")
+    .attr({x:70, y:70})
+    .fourway(200)
+    .collision()
+    .checkHits("Solid")
+    .bind("EnterFrame",function(){
+      miodekcooldown++
+    })
+    .bind("KeyDown", function(e){
+      if(e.key == Crafty.keys.P && miodekcooldown > 50){
+        miodekcooldown = 0;
+        var miodek = Crafty.e("2D, Canvas, SpriteAnimation, Collision, Solid, miodek")
+        .attr({x:swordjakubpuchatek.x, y:swordjakubpuchatek.y})
+        .reel("miodekspin", 500, 0, 11, 4)
+        .animate("miodekspin", -1)
+        .collision()
+        .checkHits("Solid")
+        .bind("EnterFrame",function(){
+          pcounter++;
+          if(lastfacingdirection == 0){
+            miodek.y-=6;
+          }
+          if(lastfacingdirection == 1){
+            miodek.x+=6;
+          }
+          if(lastfacingdirection == 2){
+            miodek.y+=6;
+          }
+          if(lastfacingdirection == 3){
+            miodek.x-=6;
+          }
+        })
+        .onHit("Solid", function(){
+          if(pcounter>20){
+            this.destroy()
+            pcounter=0;
+
+          }
+        })
+      }
+    })
+    .onHit("miodek", function(){
+      if(pcounter>20){
+        healthloss(15)}
+    })
+
+        var ninja = Crafty.e("2D, Canvas, Collision, Solid, ninja")
+          .attr({x:700, y:400})
+          .collision()
+          .onHit("miodek", function(){
+            ninjahp -=10;
+          })
+          .bind("EnterFrame", function(){
+          if(swordjakubpuchatek.x > ninja.x && swordjakubpuchatek.x < ninja.x+300 && swordjakubpuchatek.y > ninja.y && swordjakubpuchatek.y < ninja.y+300){
+            var x = ninja.x
+            var y = ninja.y
+            ninja.x = 800-x
+            ninja.y = 500-y
+          }
+          ocounter++;
+          
+          if(ocounter>100){
+            ocounter=0;
+            var ninjatargetx = Math.floor((Math.random()*650)+50)
+            var ninjatargety = Math.floor((Math.random()*400)+50)
+          }
+          if(ninjatargetx-ninja.x<0){
+            ninja.x-=ninjaspeed;
+            console.log(ninjatargety + "dziala")
+            console.log("ocounter"+ocounter)
+          }
+          else{
+            ninja.x+=ninjaspeed;
+            console.log(ninja.y)
+          }
+          if(ninjatargety-ninja.y<0){
+            ninja.y-=ninjaspeed;
+          }
+          else{
+            ninja.y+=ninjaspeed;
+          }
+      })
+
+    })
+
 
 
   
