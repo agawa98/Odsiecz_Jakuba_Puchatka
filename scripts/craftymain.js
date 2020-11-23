@@ -9,6 +9,7 @@ var hcounter = 0;
 var icounter = 0
 var jcounter = 0;
 var kcounter = 0;
+var lcounter = 0;
 var counterskel=0
 var skeletoncounter=0;
 var jakubpuchatekhp = 100;
@@ -27,6 +28,7 @@ var normalskeletonhp = 120;
 var bigskeletonhp = 160;
 var xskeletonhp = 100;
 var yskeletonhp = 100;
+var bomblont = 0
 var openbars =0;
 var miodekcooldown = 0;
 var lastfacingdirection=0;
@@ -35,6 +37,9 @@ var skelspawned= false;
 var medpackpickedup =true;
 var skelpassed=false;
 var wellchoicehasbeenmade=false;
+var bombpickedup = false;
+var bombspawned = false;
+var someonewashurt = false;
 var cobra1hp = 100;
 var cobra2hp = 100;
 var cobra3hp = 100;
@@ -114,9 +119,9 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
     ironbars: [0,0],
     house: [1,0]
   });
-  Crafty.sprite(300, "img/sprites300.png"),{
-    bombready:[0,0]
-  }
+  Crafty.sprite(300, "img/sprites300.png",{
+    bombready: [0,0],
+  });
 
   function op(){
     starcounter=10;
@@ -300,6 +305,26 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
                 })
           }
           bcounter=0;
+  }
+
+  function spawnbomb(){
+          if(bombpickedup ==false && bombspawned==false){
+            bombspawned=true
+            var bombx = Math.floor((Math.random()*650)+50)
+            var bomby = Math.floor((Math.random()*400)+50)
+            bomb = Crafty.e("2D, Canvas, Solid, Collision, bombpickup")
+                .attr({x: bombx, y: bomby})
+                .checkHits("swordjakubpuchatek")
+                .collision()
+                .bind("HitOn", function(){
+                  if(bombpickedup==false){
+                    bomb.destroy()
+                    bombpickedup=true;
+                    bombspawned=false;
+                  }
+                })
+          }
+          lcounter = 0;
   }
 
   function cobra1tookdamage(dmg){
@@ -754,6 +779,77 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
 
     newtask("Zabij cztery szkielety aby móc otworzyć bramę!", "skeletonobjective");
 
+    Crafty.bind("EnterFrame",function(){
+      lcounter++
+      if(lcounter==500){
+        spawnbomb();
+      }
+    })
+
+    Crafty.bind("KeyDown", function(e){
+      if(e.key == Crafty.keys.O){
+        console.log(bombpickedup)
+        if(bombpickedup==true){
+        bombarmed = Crafty.e("2D, Canvas, Solid, Collision, SpriteAnimation, bombready")
+        .attr({x:swordjakubpuchatek.x-150, y:swordjakubpuchatek.y-150})
+        .reel("bombexplosion", 10000, 0, 0, 2)
+        .animate("bombexplosion", 1)
+        .collision()
+        .checkHits("Solid")
+        .bind("EnterFrame",function(){
+          bomblont++;
+          if(bomblont>180){
+            this.reelPosition(1)
+          }
+          if(bomblont>201){
+            bomblont=0;
+            bombpickedup=false;
+            bombarmed.destroy();
+          }
+          if(bomblont==200){
+            if(counterskel>400){
+              if(xskeleton.x > bombarmed.x && xskeleton.x < bombarmed.x+300 && xskeleton.y > bombarmed.y && xskeleton.y < bombarmed.y+300){
+                xskeletonhp-=50;
+                isxskeletondeadyet()
+                someonewashurt=true
+              }
+            }
+            if(counterskel>1200){
+              if(bigskeleton.x > bombarmed.x && bigskeleton.x < bombarmed.x+300 && bigskeleton.y > bombarmed.y && bigskeleton.y < bombarmed.y+300){
+                bigskeletonhp-=50;
+                isbigskeletondeadyet()
+                someonewashurt=true
+              }
+            }
+            if(counterskel>800){
+              if(normalskeleton.x > bombarmed.x && normalskeleton.x < bombarmed.x+300 && normalskeleton.y > bombarmed.y && normalskeleton.y < bombarmed.y+300){
+                normalskeletonhp-=50;
+                isnormalskeletondeadyet()
+                someonewashurt=true
+              }
+            }
+            if(counterskel>1600){
+              if(yskeleton.x > bombarmed.x && yskeleton.x < bombarmed.x+300 && yskeleton.y > bombarmed.y && yskeleton.y < bombarmed.y+300){
+                yskeletonhp-=50;
+                isyskeletondeadyet()
+                someonewashurt=true
+              }
+            }
+            if(someonewashurt == true){
+              bomblont=0;
+              bombpickedup=false;
+              bombarmed.destroy();
+              spawnbomb();
+              someonewashurt=false;
+            }
+          }
+        })
+        }
+      }
+    })
+
+
+
 
 
     swordjakubpuchatek = Crafty.e("2D, Canvas, Fourway, Collision, Solid, swordjakubpuchatek")
@@ -794,11 +890,11 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
         counterskel++;
         if(skelpassed==false){
         if(counterskel==400 && skeletoncounter<4){
-          xskeleton = Crafty.e("2D, Canvas, Solid, Collision, xskeleton")
+          xskeleton = Crafty.e("2D, Canvas, Solid, Collision, xskeleton, enemy")
           .checkHits("swordjakubpuchatek")
           .attr({x:100, y:400, w:40, h:40})
           .collision()
-          .bind("HitOn",function(){
+          .onHit("swordjakubpuchatek",function(){
             if(xskeleton.x<swordjakubpuchatek.x){
               swordjakubpuchatek.x+=20
             }
@@ -819,11 +915,11 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
         }
 
         if(counterskel==800 && skeletoncounter<4){
-          normalskeleton = Crafty.e("2D, Canvas, Solid, Collision, normalskeleton")
+          normalskeleton = Crafty.e("2D, Canvas, Solid, Collision, normalskeleton, enemy")
           .checkHits("swordjakubpuchatek")
           .attr({x:700, y:100, w:40, h:40})
           .collision()
-          .bind("HitOn",function(){
+          .onHit("swordjakubpuchatek",function(){
             if(normalskeleton.x<swordjakubpuchatek.x){
               swordjakubpuchatek.x+=20
             }
@@ -843,11 +939,11 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
         }
 
         if(counterskel==1200 && skeletoncounter<4){
-          bigskeleton = Crafty.e("2D, Canvas, Solid, Collision, bigskeleton")
+          bigskeleton = Crafty.e("2D, Canvas, Solid, Collision, bigskeleton, enemy")
           .checkHits("swordjakubpuchatek")
           .attr({x:700, y:400, w:60, h:60})
           .collision()
-          .bind("HitOn",function(){
+          .onHit("swordjakubpuchatek",function(){
             if(bigskeleton.x<swordjakubpuchatek.x){
               swordjakubpuchatek.x+=40
             }
@@ -867,11 +963,11 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
         }
 
         if(counterskel==1600 && skeletoncounter<4){
-          yskeleton = Crafty.e("2D, Canvas, Solid, Collision, yskeleton")
+          yskeleton = Crafty.e("2D, Canvas, Solid, Collision, yskeleton, enemy")
           .checkHits("swordjakubpuchatek")
           .attr({x:100, y:50, w:40, h:40})
           .collision()
-          .bind("HitOn",function(){
+          .onHit("swordjakubpuchatek",function(){
             if(yskeleton.x<swordjakubpuchatek.x){
               swordjakubpuchatek.x+=20
             }
@@ -944,6 +1040,7 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
   })
 
   Crafty.scene("skeletonkilled", function(){
+    bombpickedup=false;
     medpackpickedup=false;
     Crafty.background("#411561");
     Crafty.e("Text, 2D, DOM")
@@ -983,7 +1080,6 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
            Crafty.e("2D, Canvas, Color, lawn"+lawntype)
             .attr({x: i * 20, y: j * 20})
             .color("none");
-            console.log(lawntype)
           }
           if(los>90 && los<=98){
           lawntype = Math.round(Math.random()+1)
@@ -1178,7 +1274,6 @@ var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkiele
            Crafty.e("2D, Canvas, Color, sand"+sandtype)
             .attr({x: i * 20, y: j * 20})
             .color("none");
-            console.log(lawntype)
           }
           if(los>90 && los<=98){
           sandtype = Math.round((Math.random()*2)+1)
