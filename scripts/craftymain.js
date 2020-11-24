@@ -14,6 +14,7 @@ var mcounter = 0;
 var ncounter = 0;
 var ocounter = 0;
 var pcounter = 0;
+var rcounter = 0;
 var counterskel=0
 var skeletoncounter=0;
 var jakubpuchatekhp = 100;
@@ -48,6 +49,8 @@ var ninjaspeed = 3;
 var ninjatargetx = 100
 var ninjatargety = 400
 var ninjahp = 100;
+var shurikenxdirection = 0;
+var shurikenydirection = 0;
 var swordpickedup = false;
 var skelspawned= false;
 var medpackpickedup =true;
@@ -123,6 +126,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     stripe: [1,15],
     curb1: [2,15],
     curb2: [3,15],
+    shuriken: [0,16],
 
   });
   Crafty.sprite(40, "img/sprites40.png",{
@@ -152,6 +156,10 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     openbars=4;
     counterskel = 390;
     venomresist = true;
+  }
+
+  function s5(){
+    Crafty.enterScene("fifth")
   }
 
 
@@ -1450,7 +1458,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
 
     newtask("Obroń się przed żmijami!!!!!")
 
-    newdialogbubble(miodektut, 0)
+   
 
     Crafty.bind("EnterFrame", function(){
       healthregen();
@@ -1519,44 +1527,6 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
             }
           })
       }
-    })
-    .bind("KeyDown", function(e){
-      if(e.key == Crafty.keys.P && miodekcooldown > 50){
-        miodekcooldown = 0;
-        var miodek = Crafty.e("2D, Canvas, SpriteAnimation, Collision, Solid, miodek")
-        .attr({x:swordjakubpuchatek.x, y:swordjakubpuchatek.y})
-        .reel("miodekspin", 500, 0, 11, 4)
-        .animate("miodekspin", -1)
-        .collision()
-        .checkHits("Solid")
-        .bind("EnterFrame",function(){
-          icounter++;
-          if(lastfacingdirection == 0){
-            miodek.y-=6;
-          }
-          if(lastfacingdirection == 1){
-            miodek.x+=6;
-          }
-          if(lastfacingdirection == 2){
-            miodek.y+=6;
-          }
-          if(lastfacingdirection == 3){
-            miodek.x-=6;
-          }
-        })
-        .onHit("Solid", function(){
-          if(icounter>20){
-            this.destroy()
-            icounter=0;
-
-          }
-        })
-      }
-    })
-    .onHit("miodek", function(){
-      if(icounter>20){
-        healthloss(15)}
-      
     })
     .onHit("enemy",function(){
       if(jcounter>40){
@@ -1851,6 +1821,8 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
       generateSouthWall()
       generateStripes()
 
+      newdialogbubble(miodektut, 0)
+
       newtask("Pokonaj ruskiego agenta", "killninja")
 
       var swordjakubpuchatek = Crafty.e("2D, Canvas, Fourway, Collision, Solid, swordjakubpuchatek")
@@ -1906,27 +1878,22 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
             ninjahp -=10;
           })
           .bind("EnterFrame", function(){
-          if(swordjakubpuchatek.x > ninja.x && swordjakubpuchatek.x < ninja.x+300 && swordjakubpuchatek.y > ninja.y && swordjakubpuchatek.y < ninja.y+300){
-            var x = ninja.x
-            var y = ninja.y
-            ninja.x = 800-x
-            ninja.y = 500-y
+          if(swordjakubpuchatek.x > ninja.x-100 && swordjakubpuchatek.x < ninja.x+100 && swordjakubpuchatek.y > ninja.y-100 && swordjakubpuchatek.y < ninja.y+100){
+            ninja.x =Math.floor((Math.random()*650)+50)
+            ninja.y = Math.floor((Math.random()*400)+50)
           }
           ocounter++;
           
           if(ocounter>100){
             ocounter=0;
-            var ninjatargetx = Math.floor((Math.random()*650)+50)
-            var ninjatargety = Math.floor((Math.random()*400)+50)
+            ninjatargetx = Math.floor((Math.random()*650)+50)
+            ninjatargety = Math.floor((Math.random()*400)+50)
           }
           if(ninjatargetx-ninja.x<0){
             ninja.x-=ninjaspeed;
-            console.log(ninjatargety + "dziala")
-            console.log("ocounter"+ocounter)
           }
           else{
             ninja.x+=ninjaspeed;
-            console.log(ninja.y)
           }
           if(ninjatargety-ninja.y<0){
             ninja.y-=ninjaspeed;
@@ -1934,6 +1901,34 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           else{
             ninja.y+=ninjaspeed;
           }
+
+          rcounter++
+          if(rcounter>200){
+            rcounter=0;
+            shurikenxdirection = (ninja.x-swordjakubpuchatek.x)/30
+            shurikenydirection = (ninja.y-swordjakubpuchatek.y)/30
+
+            var shuriken = Crafty.e("2D, Canvas, Solid, Collision, SpriteAnimation, shuriken")
+            .attr({x:ninja.x, y:ninja.y})
+            .collision()
+            .reel("shurikenspin", 400, 0, 16, 4)
+            .animate("shurikenspin", -1)
+            .onHit("swordjakubpuchatek", function(){
+              healthloss(30);
+              shuriken.destroy()
+            })
+            Crafty.bind("EnterFrame",function(){
+              console.log("dirobliczony" + ocounter)
+              shuriken.x-=shurikenxdirection;
+              shuriken.y-=shurikenydirection;
+
+              if(rcounter>150){
+                shuriken.destroy()
+              }
+
+            })
+          }
+         
       })
 
     })
@@ -1941,8 +1936,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
 
 
   
-  
-  
+
   
   
   Crafty.scene("dead", function(){
@@ -1952,10 +1946,6 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     .attr({x:30, y:230, w: 700, h:50})
     .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"})
   })
-
-
-
-
 
 
 
