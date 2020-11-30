@@ -4,9 +4,9 @@ var ccounter = 0;
 var dcounter = 0;
 var ecounter = 0;
 var fcounter = 0;
-var gcounter = 0
+var gcounter = 0;
 var hcounter = 0;
-var icounter = 0
+var icounter = 0;
 var jcounter = 0;
 var kcounter = 0;
 var lcounter = 0;
@@ -17,6 +17,9 @@ var pcounter = 0;
 var rcounter = 0;
 var scounter = 0;
 var tcounter = 0;
+var ucounter = 0;
+var wcounter = 0;
+var xcounter = 0;
 var counterskel=250
 var skeletoncounter=0;
 var jakubpuchatekhp = 100;
@@ -53,6 +56,10 @@ var ninjatargety = 400
 var ninjahp = 100;
 var shurikenxdirection = 0;
 var shurikenydirection = 0;
+var putinspeed = 2;
+var putintargetx = 600
+var putintargety = 100
+var putinhp = 250
 var swordpickedup = false;
 var skelspawned= false;
 var medpackpickedup =true;
@@ -60,6 +67,7 @@ var skelpassed=false;
 var wellchoicehasbeenmade=false;
 var bombpickedup = false;
 var bombspawned = false;
+var thebombhasbeenplanted = false;
 var someonewashurt = false;
 var venomresist = false;
 var ninjakilled = false;
@@ -130,21 +138,34 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     curb1: [2,15],
     curb2: [3,15],
     shuriken: [0,16],
+    doll20: [1,17],
 
   });
   Crafty.sprite(40, "img/sprites40.png",{
     jakubpuchatek: [0,0],
     swordjakubpuchatek: [0,1],
     wizard: [1,0],
+    doll40: [2,0],
     normalskeleton: [1,1],
     xskeleton: [0,2],
     yskeleton: [1,2],
     ninja: [0,3],
-    kgbfloor: [1,3]
+    kgbfloor: [1,3],
+    sickle: [0,4]
   });
   Crafty.sprite(60, "img/sprites60.png",{
     bigskeleton: [0,0],
-    wishingwell: [1,0]
+    wishingwell: [1,0],
+    doll60: [0,1]
+  });
+  Crafty.sprite(80, "img/sprites80.png",{
+    doll80 : [0,0]
+  })
+  Crafty.sprite(100, "img/sprites100.png",{
+    putindefault: [0,0],
+    putincrying: [1,0],
+    putinwink: [2,0],
+    putindead: [3,0],
   });
   Crafty.sprite(140, "img/sprites140.png",{
     ironbars: [0,0],
@@ -395,6 +416,14 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
       objectivecompleted("killninja")
       ninja.destroy()
       ninjakilled = true
+    }
+  }
+
+  function isputindeadyet(){
+    if(putinhp<1){
+      objectivecompleted("killputin")
+      putin.destroy()
+      putinkilled = true
     }
   }
 
@@ -838,7 +867,9 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
 
     Crafty.bind("KeyDown", function(e){
       if(e.key == Crafty.keys.O){
-        if(bombpickedup==true){
+        
+        if(bombpickedup==true && thebombhasbeenplanted==false){
+        thebombhasbeenplanted=true
         bombarmed = Crafty.e("2D, Canvas, Solid, Collision, SpriteAnimation, bombready")
         .attr({x:swordjakubpuchatek.x-150, y:swordjakubpuchatek.y-150})
         .reel("bombexplosion", 10000, 0, 0, 2)
@@ -846,13 +877,15 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
         .collision()
         .checkHits("Solid")
         .bind("EnterFrame",function(){
+          
           bomblont++;
-          if(bomblont>180){
+          if(bomblont>190){
             this.reelPosition(1)
           }
           if(bomblont>201){
             bomblont=0;
             bombpickedup=false;
+            thebombhasbeenplanted=false;
             bombarmed.destroy();
           }
           if(bomblont==200){
@@ -1660,19 +1693,10 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
       }
     })
 
+
+
+
     
-
-    
-      
-    
-    
-
-
-
-
-
-
-
   })
 
   Crafty.scene("snakesescaped",function(){
@@ -2037,6 +2061,8 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
       generateNorthWall()
       generateEastWall()
 
+      newtask("Pokonaj Putina")
+
       Crafty.e("2D, Canvas, carpet")
       .attr({x:250, y:150})
 
@@ -2089,7 +2115,130 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
 
 
 
-      var putin = Crafty.e("2D, Canvas, Solid, Collision, putin")
+      var putin = Crafty.e("2D, Canvas, Solid, Collision, SpriteAnimation, putindefault")
+      .attr({x:700, y:300})
+      .reel("putin", 100000000, 0, 0, 4)
+      .animate("putin", -1)
+      .collision()
+      .onHit("swordjakubpuchatek", function(){
+        healthloss(30);
+        if(putin.x<swordjakubpuchatek.x){
+          swordjakubpuchatek.x+=20
+        }
+        if(putin.x>swordjakubpuchatek.x){
+          swordjakubpuchatek.x-=20
+        }
+        if(putin.y<swordjakubpuchatek.y){
+          swordjakubpuchatek.y+=20
+        }
+        if(putin.y>swordjakubpuchatek.y){
+          swordjakubpuchatek.y-=20
+        }
+        putinhp-=(damagemultiplier* 20);
+        isputindeadyet;
+      })
+      .bind("EnterFrame", function(){
+        ucounter++;
+        
+        if(ucounter>100){
+          ucounter=0;
+          putintargetx = Math.floor((Math.random()*250)+400)
+          putintargety = Math.floor((Math.random()*200)+150)
+        }
+        if(putintargetx-putin.x<0){
+          putin.x-=putinspeed;
+        }
+        else{
+          putin.x+=putinspeed;
+        }
+        if(putintargety-putin.y<0){
+          putin.y-=putinspeed;
+        }
+        else{
+          putin.y+=putinspeed;
+        }
+
+        wcounter++;
+
+        if(wcounter==260){
+          putin.reelPosition(2);
+        }
+        if(wcounter>300){
+          putin.reelPosition(0);
+          wcounter=0;
+          projectile1xdirection = (putin.x-swordjakubpuchatek.x)/40
+          projectile1ydirection = (putin.y-swordjakubpuchatek.y)/40
+          projectile2xdirection = (putin.x-swordjakubpuchatek.x - 100)/40
+          projectile2ydirection = (putin.y-swordjakubpuchatek.y - 100)/40
+          projectile3xdirection = (putin.x-swordjakubpuchatek.x + 100)/40
+          projectile3ydirection = (putin.y-swordjakubpuchatek.y + 100)/40
+
+          var projectile1 = Crafty.e("2D, Canvas, Solid, Collision, SpriteAnimation, sickle")
+          .attr({x:putin.x, y:putin.y})
+          .collision()
+          .reel("sicklespin", 400, 0, 4, 4)
+          .animate("sicklespin", -1)
+          .onHit("swordjakubpuchatek", function(){
+            healthloss(20);
+            projectile1.destroy()
+          })
+          var projectile2 = Crafty.e("2D, Canvas, Solid, Collision, SpriteAnimation, sickle")
+          .attr({x:putin.x, y:putin.y})
+          .collision()
+          .reel("sicklespin", 400, 0, 4, 4)
+          .animate("sicklespin", -1)
+          .onHit("swordjakubpuchatek", function(){
+            healthloss(20);
+            projectile2.destroy()
+          })
+          var projectile3 = Crafty.e("2D, Canvas, Solid, Collision, SpriteAnimation, sickle")
+          .attr({x:putin.x, y:putin.y})
+          .collision()
+          .reel("sicklespin", 400, 0, 4, 4)
+          .animate("sicklespin", -1)
+          .onHit("swordjakubpuchatek", function(){
+            healthloss(20);
+            projectile3.destroy()
+          })
+          Crafty.bind("EnterFrame",function(){
+            projectile1.x-=projectile1xdirection;
+            projectile1.y-=projectile1ydirection;
+            projectile2.x-=projectile2xdirection;
+            projectile2.y-=projectile2ydirection;
+            projectile3.x-=projectile3xdirection;
+            projectile3.y-=projectile3ydirection;
+
+            if(wcounter>150){
+              projectile1.destroy()
+              projectile2.destroy()
+              projectile3.destroy()
+            }
+
+          })
+        }
+
+        if(putinhp<100 && putinhp>20){
+          putin.reelPosition(1)
+        }
+
+        if(putinhp<=20){
+          putin.reelPosition(3)
+        }
+
+
+
+
+
+
+        xcounter++
+
+          if(xcounter>300){
+            xcounter=0
+            spawnmedpack()
+          }
+        
+        
+      })
 
 
 
