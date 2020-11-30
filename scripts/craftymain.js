@@ -18,8 +18,10 @@ var rcounter = 0;
 var scounter = 0;
 var tcounter = 0;
 var ucounter = 0;
-var wcounter = 0;
+var wcounter = 300;
 var xcounter = 0;
+var ycounter = 0;
+var aacounter = 0;
 var counterskel=250
 var skeletoncounter=0;
 var jakubpuchatekhp = 100;
@@ -56,7 +58,7 @@ var ninjatargety = 400
 var ninjahp = 100;
 var shurikenxdirection = 0;
 var shurikenydirection = 0;
-var putinspeed = 2;
+var putinspeed = 1;
 var putintargetx = 600
 var putintargety = 100
 var putinhp = 250
@@ -71,6 +73,7 @@ var thebombhasbeenplanted = false;
 var someonewashurt = false;
 var venomresist = false;
 var ninjakilled = false;
+var dollskilled = true;
 var villageburnedtext = "Ta wioska wyglądała podejrzanie więc wybiegłeś stamtąd jak najszybciej nawet nie patrząc na studnię"
 var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co ty robisz z moimi gwiazdami??", "Czarodziej: Stój!!!!!", "Czarodziej: *sapie*"]
 var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkielet: Co zrobiłeś z Czarodziejem???"]
@@ -416,6 +419,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
       objectivecompleted("killninja")
       ninja.destroy()
       ninjakilled = true
+      Crafty.enterScene("ninjadead")
     }
   }
 
@@ -424,6 +428,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
       objectivecompleted("killputin")
       putin.destroy()
       putinkilled = true
+      Crafty.enterScene("end1")
     }
   }
 
@@ -1892,7 +1897,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
         healthloss(15)}
     })
 
-        var ninja = Crafty.e("2D, Canvas, Collision, Solid, ninja")
+        ninja = Crafty.e("2D, Canvas, Collision, Solid, ninja")
           .attr({x:700, y:400})
           .collision()
           .onHit("miodek", function(){
@@ -1900,6 +1905,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
             isninjadeadyet();
           })
       .bind("EnterFrame", function(){
+        healthregen();
           if(swordjakubpuchatek.x > ninja.x-100 && swordjakubpuchatek.x < ninja.x+100 && swordjakubpuchatek.y > ninja.y-100 && swordjakubpuchatek.y < ninja.y+100){
             ninja.x =Math.floor((Math.random()*650)+50)
             ninja.y = Math.floor((Math.random()*400)+50)
@@ -2138,6 +2144,8 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
         isputindeadyet;
       })
       .bind("EnterFrame", function(){
+
+        healthregen()
         ucounter++;
         
         if(ucounter>100){
@@ -2160,10 +2168,10 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
 
         wcounter++;
 
-        if(wcounter==260){
+        if(wcounter==560){
           putin.reelPosition(2);
         }
-        if(wcounter>300){
+        if(wcounter>1200){
           putin.reelPosition(0);
           wcounter=0;
           projectile1xdirection = (putin.x-swordjakubpuchatek.x)/40
@@ -2216,7 +2224,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
 
           })
         }
-
+        
         if(putinhp<100 && putinhp>20){
           putin.reelPosition(1)
         }
@@ -2224,12 +2232,6 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
         if(putinhp<=20){
           putin.reelPosition(3)
         }
-
-
-
-
-
-
         xcounter++
 
           if(xcounter>300){
@@ -2243,6 +2245,14 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
 
 
 
+    })
+
+    Crafty.scene("end", function(){
+      Crafty.background("gray");
+      Crafty.e("Text, 2D, DOM")
+      .text("Po tym jak pokonałeś swojego najgorszego wroga, czujesz, że wypełniłeś swój życiowy cel. Odchodzisz w kierunku Stumilowego Lasu, po drodze wybuchając cały budynek KGB.")
+      .attr({x:30, y:230, w: 700, h:50})
+      .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"})
     })
 
 
