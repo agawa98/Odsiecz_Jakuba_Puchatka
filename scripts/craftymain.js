@@ -22,7 +22,7 @@ var wcounter = 0;
 var xcounter = 0;
 var ycounter = 0;
 var aacounter = 0;
-var counterskel=250
+var counterskel=250;
 var skeletoncounter=0;
 var jakubpuchatekhp = 100;
 var swordjakubpuchatekhp=100;
@@ -31,7 +31,7 @@ var healthregentimeout = 100;
 var damagemultiplier=1;
 var wizardhp = 150;
 var starcounter = 0;
-var wizardspeed =.5;
+var wizardspeed =0.5;
 var normalskeletonspeed = 1.8;
 var bigskeletonspeed = 1.5;
 var xskeletonspeed = 3;
@@ -40,7 +40,7 @@ var normalskeletonhp = 120;
 var bigskeletonhp = 160;
 var xskeletonhp = 100;
 var yskeletonhp = 100;
-var bomblont = 0
+var bomblont = 0;
 var openbars =0;
 var miodekcooldown = 0;
 var lastfacingdirection=0;
@@ -53,15 +53,15 @@ var cobra2speed = 3;
 var cobra3speed = 4;
 var venomduration = 0;
 var ninjaspeed = 3;
-var ninjatargetx = 100
-var ninjatargety = 400
+var ninjatargetx = 100;
+var ninjatargety = 400;
 var ninjahp = 100;
 var shurikenxdirection = 0;
 var shurikenydirection = 0;
 var putinspeed = 1;
-var putintargetx = 600
-var putintargety = 100
-var putinhp = 250
+var putintargetx = 600;
+var putintargety = 100;
+var putinhp = 250;
 var swordpickedup = false;
 var skelspawned= false;
 var medpackpickedup =true;
@@ -74,15 +74,14 @@ var someonewashurt = false;
 var venomresist = false;
 var ninjakilled = false;
 var dollskilled = true;
-var villageburnedtext = "Ta wioska wyglądała podejrzanie więc wybiegłeś stamtąd jak najszybciej nawet nie patrząc na studnię"
-var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co ty robisz z moimi gwiazdami??", "Czarodziej: Stój!!!!!", "Czarodziej: *sapie*"]
-var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkielet: Co zrobiłeś z Czarodziejem???"]
-var bombtut = ["Kliknij O aby podłożyć bombę (najpierw musisz ją zebrać)"]
-var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
+var villageburnedtext = "Ta wioska wyglądała podejrzanie więc wybiegłeś stamtąd jak najszybciej nawet nie patrząc na studnię";
+var wizardtext = ["Czarodziej: Hultaju oddawaj moje gwiazdy!!!", "Czarodziej: Co ty robisz z moimi gwiazdami??", "Czarodziej: Stój!!!!!", "Czarodziej: *sapie*"];
+var skeletontext = ["*kości stukają*", "Szkielet: Co ty tu robisz??", "Szkielet: Co zrobiłeś z Czarodziejem???"];
+var bombtut = ["Kliknij O aby podłożyć bombę (najpierw musisz ją zebrać)"];
+var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"];
   Crafty.init(800, 500, document.getElementById("game"));
   
   Crafty.sprite(20, "img/sprites20.png",{
-    void: [111,11111],
     grass1: [0,0],
     grass2: [1,0],
     grass3: [2,0],
@@ -163,7 +162,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
   });
   Crafty.sprite(80, "img/sprites80.png",{
     doll80 : [0,0]
-  })
+  });
   Crafty.sprite(100, "img/sprites100.png",{
     putindefault: [0,0],
     putincrying: [1,0],
@@ -188,11 +187,11 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
   }
 
   function s5(){
-    Crafty.enterScene("fifth")
+    Crafty.enterScene("fifth");
   }
 
   function s6(){
-    Crafty.enterScene("sixth")
+    Crafty.enterScene("sixth");
   }
 
 
@@ -201,9 +200,9 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
   function newtask(content, id){
     var text = document.createTextNode(content);
     var parag = document.createElement("p");
-    parag.className = "objective"
+    parag.className = "objective";
     parag.id = id;
-    var objdiv = document.getElementById("objectivelist")
+    var objdiv = document.getElementById("objectivelist");
     parag.appendChild(text);
     objdiv.appendChild(parag);
   }
@@ -256,11 +255,11 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
       newdialogbubble(skeletontext, 2);
     }
     openbars++;
-    console.log(openbars)
-    console.log(normalskeletonhp + "normal")
-    console.log(xskeletonhp + "x")
-    console.log(yskeletonhp + "y")
-    console.log(bigskeletonhp + "big")
+    console.log(openbars);
+    console.log(normalskeletonhp + "normal");
+    console.log(xskeletonhp + "x");
+    console.log(yskeletonhp + "y");
+    console.log(bigskeletonhp + "big");
     if(openbars>3){
       skelpassed=true;
       ironbars.destroy();
@@ -271,25 +270,25 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
   function isnormalskeletondeadyet(){
     if(normalskeletonhp<1){
       caniopenbars();
-      normalskeleton.destroy()
+      normalskeleton.destroy();
     }
   }
   function isbigskeletondeadyet(){
     if(bigskeletonhp<1){
       caniopenbars();
-      bigskeleton.destroy()
+      bigskeleton.destroy();
     }
   }
   function isxskeletondeadyet(){
     if(xskeletonhp<1){
       caniopenbars();
-      xskeleton.destroy()
+      xskeleton.destroy();
     }
   }
   function isyskeletondeadyet(){
     if(yskeletonhp<1){
       caniopenbars();
-      yskeleton.destroy()
+      yskeleton.destroy();
     }
   }
 
@@ -323,9 +322,9 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
   }
 
   function healthregen(){
-      ccounter++
+      ccounter++;
       if(ccounter > healthregentimeout && swordjakubpuchatekhp <99){
-        console.log("leczy")
+        console.log("leczy");
         healthloss(-2);
       }
       if(ccounter>healthregentimeout){
@@ -336,28 +335,28 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
   document.getElementById("wellbtn").addEventListener("click", function(event){
     event.preventDefault();
     wellwished();
-  })
+  });
 
   function wellwished(){
     if(document.getElementById("biggerhealth").checked){
       healthregentimeout=50;
-      villageburnedtext = "Pełen sił idziesz przed siebie w kierunku Moskwy."
+      villageburnedtext = "Pełen sił idziesz przed siebie w kierunku Moskwy.";
     }
     if(document.getElementById("biggersword").checked){
       damagemultiplier = 2;
-      villageburnedtext = "Z podwójnie śmiertelnym mieczem biegniesz dalej w kierunku Moskwy."
+      villageburnedtext = "Z podwójnie śmiertelnym mieczem biegniesz dalej w kierunku Moskwy.";
     }
     wellchoicehasbeenmade=true;
-    objectivecompleted("wellobjective")
-    document.getElementById("wellchoice").style.visibility = "hidden"
+    objectivecompleted("wellobjective");
+    document.getElementById("wellchoice").style.visibility = "hidden";
   }
 
   function spawnmedpack(){
     let los = Math.round(Math.random()*10);
           if(los>3 && medpackpickedup ==true){
             medpackpickedup=false;
-            var medx = Math.floor((Math.random()*650)+50)
-            var medy = Math.floor((Math.random()*400)+50)
+            var medx = Math.floor((Math.random()*650)+50);
+            var medy = Math.floor((Math.random()*400)+50);
             medpack = Crafty.e("2D, Canvas, Solid, Collision, medpack")
                 .attr({x: medx, y: medy, w:20, h:20})
                 .checkHits("swordjakubpuchatek")
@@ -365,36 +364,36 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
                 .bind("HitOn", function(){
                   if(swordjakubpuchatekhp<76){
                     healthloss(-25);
-                    medpack.destroy()
+                    medpack.destroy();
                     medpackpickedup=true;
                   }
                   if(swordjakubpuchatekhp>75 && swordjakubpuchatekhp<100){
-                    let damage = (100-swordjakubpuchatekhp)*-1
+                    let damage = (100-swordjakubpuchatekhp)*-1;
                     healthloss(damage);
                     medpack.destroy();
                     medpackpickedup=true;
                   }
-                })
+                });
           }
           bcounter=0;
   }
 
   function spawnbomb(){
           if(bombpickedup ==false && bombspawned==false && skelpassed == false){
-            bombspawned=true
-            var bombx = Math.floor((Math.random()*650)+50)
-            var bomby = Math.floor((Math.random()*400)+50)
+            bombspawned=true;
+            var bombx = Math.floor((Math.random()*650)+50);
+            var bomby = Math.floor((Math.random()*400)+50);
             bomb = Crafty.e("2D, Canvas, Solid, Collision, bombpickup")
                 .attr({x: bombx, y: bomby})
                 .checkHits("swordjakubpuchatek")
                 .collision()
                 .bind("HitOn", function(){
                   if(bombpickedup==false){
-                    bomb.destroy()
+                    bomb.destroy();
                     bombpickedup=true;
                     bombspawned=false;
                   }
-                })
+                });
           }
           lcounter = 0;
   }
@@ -402,44 +401,44 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
   function cobra1tookdamage(dmg){
     cobra1hp-=dmg;
     if(cobra1hp<1){
-      cobra1.destroy()
+      cobra1.destroy();
     }
   }
 
   function cobra2tookdamage(dmg){
     cobra2hp-=dmg;
     if(cobra2hp<1){
-      cobra2.destroy()
+      cobra2.destroy();
     }
   }
 
   function cobra3tookdamage(dmg){
     cobra3hp-=dmg;
     if(cobra3hp<1){
-      cobra3.destroy()
+      cobra3.destroy();
     }
   }
 
   function isninjadeadyet(){
     if(ninjahp<1){
-      objectivecompleted("killninja")
-      ninja.destroy()
-      ninjakilled = true
-      Crafty.enterScene("ninjadown")
+      objectivecompleted("killninja");
+      ninja.destroy();
+      ninjakilled = true;
+      Crafty.enterScene("ninjadown");
     }
   }
 
   function isputindeadyet(){
     if(putinhp<1){
-      objectivecompleted("killputin")
-      putin.destroy()
-      putinkilled = true
-      Crafty.enterScene("end1")
+      objectivecompleted("killputin");
+      putin.destroy();
+      putinkilled = true;
+      Crafty.enterScene("end1");
     }
   }
 
   Crafty.scene("introduction", function(){
-    Crafty.background("#158f1b")
+    Crafty.background("#158f1b");
     Crafty.e("2D, DOM, Text")
     .text("Po tym, jak Kłapouchy okazał się agentem KGB, który miał na celu eksterminację wszystkich obywateli Stumilowego Lasu, Jakub Puchatek miał już dość tych zdradzieckich rusków.")
     .attr({x:30, y:230, w: 700, h:50})
@@ -447,18 +446,18 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     .bind("EnterFrame", function(){
       dcounter++;
       if(dcounter==400){
-        Crafty.enterScene("introduction2")
+        Crafty.enterScene("introduction2");
       }
     })
     .bind("KeyDown", function(e){
       if(e.key == Crafty.keys.SPACE){
         dcounter = 399;
       }
-    })
-  })
+    });
+  });
 
   Crafty.scene("introduction2", function(){
-    Crafty.background("#168250")
+    Crafty.background("#168250");
     Crafty.e("2D, DOM, Text")
     .text("Zaraz po pogrzebie Krzysia wyruszył w podróż do filii rosyjskiej agencji niecałe 2500km stąd. Pierwszą przeszkodę spotkał jeszcze w swoim rodzimym lesie.")
     .attr({x:30, y:230, w: 700, h:50})
@@ -466,15 +465,15 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     .bind("EnterFrame", function(){
       ecounter++;
       if(ecounter==400){
-        Crafty.enterScene("first")
+        Crafty.enterScene("first");
       }
     })
     .bind("KeyDown", function(e){
       if(e.key == Crafty.keys.SPACE){
         ecounter = 399;
       }
-    })
-  })
+    });
+  });
 
 
 
@@ -485,7 +484,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
            function generateWorld() {
             for (var i = 0; i < 40; i++) {
               for (var j = 0; j < 25; j++) {
-                 grassType = Math.floor((Math.random()*4)+1)
+                 grassType = Math.floor((Math.random()*4)+1);
                  Crafty.e("2D, Canvas, Color, grass"+grassType)
                   .attr({x: i * 20, y: j * 20})
                   .color("none");
@@ -504,7 +503,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
                   if(swordpickedup == true){
                     swordjakubpuchatek.x+=12;
                   }
-                })
+                });
             }
           }
 
@@ -519,7 +518,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
                   if(swordpickedup == true){
                     swordjakubpuchatek.x-=12;
                   }
-                })
+                });
             }
           }
 
@@ -534,7 +533,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
                   if(swordpickedup == true){
                     swordjakubpuchatek.y+=12;
                   }
-                })
+                });
             }
           }
 
@@ -550,7 +549,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
                     swordjakubpuchatek.y-=12;
                     
                   }
-                })
+                });
             }
           }
         Crafty.bind("EnterFrame", function(){
@@ -566,7 +565,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           else{
             wizard.y+=wizardspeed;
           }
-        })
+        });
 
         generateWorld();
         generateWestWall();
@@ -577,7 +576,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
         var stext = document.createTextNode("Zbierz gwiazdy 0/11");
         var parag = document.createElement("p");
         parag.className = "objective";
-        parag.id = "stars"
+        parag.id = "stars";
         var objdiv = document.getElementById("objectivelist");
         parag.appendChild(stext);
         objdiv.appendChild(parag);
@@ -590,7 +589,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           .collision()
           .checkHits("Solid")
           .bind("HitOn",function(){
-          })
+          });
           
 
           wizard = Crafty.e("2D, Canvas, Solid, Collision, wizard")
@@ -599,25 +598,25 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           .collision()
           .bind("HitOn",function(){
             if(wizard.x<jakubpuchatek.x){
-              jakubpuchatek.x+=20
+              jakubpuchatek.x+=20;
             }
             if(wizard.x>jakubpuchatek.x){
-              jakubpuchatek.x-=20
+              jakubpuchatek.x-=20;
             }
             if(wizard.y<jakubpuchatek.y){
-              jakubpuchatek.y+=20
+              jakubpuchatek.y+=20;
             }
             if(wizard.y>jakubpuchatek.y){
-              jakubpuchatek.y-=20
+              jakubpuchatek.y-=20;
             }
             let damage = 10;
             healthloss(damage);
-          })
+          });
 
           function starcollector(){
 
-            starx = Math.floor((Math.random()*700)+50)
-            stary = Math.floor((Math.random()*400)+50)
+            starx = Math.floor((Math.random()*700)+50);
+            stary = Math.floor((Math.random()*400)+50);
 
             star = Crafty.e("2D, Canvas, Solid, Collision, star")
             .attr({x: starx, y: stary, w:20, h:20})
@@ -630,7 +629,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
                 if(starcounter<11){
                   starcollector();
                 } 
-                $("#stars").html("Zbierz gwiazdy ("+starcounter+"/11)")
+                $("#stars").html("Zbierz gwiazdy ("+starcounter+"/11)");
                 if(starcounter>10){
                   objectiveid="stars";
                   objectivecompleted(objectiveid);
@@ -655,9 +654,9 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
                         iswizarddeadyet();
                       })
                       .bind("HitOn",function(){
-                      })
+                      });
                     swordjakubpuchatekhp = jakubpuchatekhp;
-                    jakubpuchatek.destroy()
+                    jakubpuchatek.destroy();
                     
                     swordwizard = Crafty.e("2D, Canvas, Solid, Collision, wizard")
                       .attr({x:wizard.x, y:wizard.y, w:40, h:40})
@@ -665,19 +664,19 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
                       .collision()
                       .bind("HitOn",function(){
                         if(swordwizard.x<swordjakubpuchatek.x){
-                          swordjakubpuchatek.x+=20
+                          swordjakubpuchatek.x+=20;
                         }
                         if(swordwizard.x>swordjakubpuchatek.x){
-                          swordjakubpuchatek.x-=20
+                          swordjakubpuchatek.x-=20;
                         }
                         if(swordwizard.y<swordjakubpuchatek.y){
-                          swordjakubpuchatek.y+=20
+                          swordjakubpuchatek.y+=20;
                         }
                         if(swordwizard.y>swordjakubpuchatek.y){
-                          swordjakubpuchatek.y-=20
+                          swordjakubpuchatek.y-=20;
                         }
                         healthloss(10);
-                      })
+                      });
                     swordwizardspeed = 2.5;
                     wizard.destroy();
                     Crafty.bind("EnterFrame", function(){
@@ -693,19 +692,19 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
                       else{
                         swordwizard.y+=swordwizardspeed;
                       }
-                    })
-                  })
+                    });
+                  });
                 }
-                let los = Math.floor(Math.random()*100)
+                let los = Math.floor(Math.random()*100);
                 if(los>75){
-                  newdialogbubble(wizardtext, 3)
+                  newdialogbubble(wizardtext, 3);
                 }
-            })
+            });
           }
           
           starcollector();
           
-  })
+  });
 
 
 
@@ -722,7 +721,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     .bind("EnterFrame", function(){
       acounter++;
       if(acounter==250){
-        Crafty.enterScene("second")
+        Crafty.enterScene("second");
       }
       if(acounter==249){
         clearobjectives();
@@ -732,8 +731,8 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
       if(e.key == Crafty.keys.SPACE){
         acounter = 248;
       }
-    })
-  })
+    });
+  });
   
 
 
@@ -747,7 +746,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
         for (var j = 0; j < 25; j++) {
           var los=Math.round(Math.random()*100);
           if(los>97){
-           cavetype = Math.floor((Math.random()*6)+2)
+           cavetype = Math.floor((Math.random()*6)+2);
            Crafty.e("2D, Canvas, Color, cave"+cavetype)
             .attr({x: i * 20, y: j * 20})
             .color("none");
@@ -763,14 +762,14 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
   
     function generateWestWall(){
       for(var i=0;i<25;i++){
-        lavatype = Math.round(Math.random()+1)
+        lavatype = Math.round(Math.random()+1);
         Crafty.e("2D, Canvas, Solid, Collision, lava"+lavatype)
           .attr({x:0 , y:i*20})
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.x+=12;
           healthloss(20);
-          })
+          });
       }
     }
 
@@ -780,7 +779,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
         if(i>9 && i<15){
           continue;
         }
-        lavatype = Math.round(Math.random()+1)
+        lavatype = Math.round(Math.random()+1);
         Crafty.e("2D, Canvas, Solid, Collision, lava"+lavatype)
           .attr({x:j*20 , y:i*20})
           .checkHits("jakubpuchatek")
@@ -788,7 +787,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           .bind("HitOn", function(){
           swordjakubpuchatek.x-=12;
           healthloss(20);
-          })
+          });
       }
     }
     }
@@ -796,9 +795,9 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     function generateBridge(){
       for(var j=37;j<40;j++){
         for(var i=10; i<15;i++){
-          let bridgetype = Math.round(Math.random()+1)
+          let bridgetype = Math.round(Math.random()+1);
           Crafty.e("2D, Canvas, bridge"+bridgetype)
-          .attr({x:j*20, y:i*20})
+          .attr({x:j*20, y:i*20});
         }
       }
     }
@@ -811,12 +810,12 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
         .checkHits("swordjakubpuchatek")
         .bind("HitOn", function(){
           swordjakubpuchatek.x-=16;
-        })
+        });
     }
 
     function generateNorthWall(){
       for(var i=0;i<40;i++){
-        lavatype = Math.round(Math.random()+1)
+        lavatype = Math.round(Math.random()+1);
         Crafty.e("2D, Canvas, Solid, Collision, lava"+lavatype)
           .attr({x:20*i , y:0})
           .checkHits("jakubpuchatek")
@@ -824,20 +823,20 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           .bind("HitOn", function(){
           swordjakubpuchatek.y+=12;
           healthloss(20);
-          })
+          });
       }
     }
 
     function generateSouthWall(){
       for(var i=0;i<40;i++){
-        lavatype = Math.round(Math.random()+1)
+        lavatype = Math.round(Math.random()+1);
         Crafty.e("2D, Canvas, Solid, Collision, lava"+lavatype)
           .attr({x:i*20 , y:480})
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.y-=12; 
           healthloss(20);
-          })
+          });
       }
     }
 
@@ -851,9 +850,9 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           cleardialog();
           clearobjectives();
           Crafty.enterScene("skeletonkilled");
-          let swjphp = -1*(100-swordjakubpuchatekhp)
-        healthloss(swjphp)
-        })
+          let swjphp = -1*(100-swordjakubpuchatekhp);
+        healthloss(swjphp);
+        });
     }
 
     generateWorld();
@@ -867,22 +866,22 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
 
     newtask("Zabij cztery szkielety aby móc otworzyć bramę!", "skeletonobjective");
 
-    newdialogbubble(bombtut, 0)
+    newdialogbubble(bombtut, 0);
 
     Crafty.bind("EnterFrame",function(){
-      lcounter++
+      lcounter++;
       if(lcounter==500){
         spawnbomb();
       }
-    })
+    });
 
     Crafty.bind("KeyDown", function(e){
       if(e.key == Crafty.keys.O){
-        console.log(bombpickedup)
-        console.log(thebombhasbeenplanted)
+        console.log(bombpickedup);
+        console.log(thebombhasbeenplanted);
         
         if(bombpickedup==true && thebombhasbeenplanted==false){
-        thebombhasbeenplanted=true
+        thebombhasbeenplanted=true;
         bombarmed = Crafty.e("2D, Canvas, Solid, Collision, SpriteAnimation, bombready")
         .attr({x:swordjakubpuchatek.x-150, y:swordjakubpuchatek.y-150})
         .reel("bombexplosion", 10000, 0, 0, 2)
@@ -893,7 +892,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           
           bomblont++;
           if(bomblont>190){
-            this.reelPosition(1)
+            this.reelPosition(1);
           }
           if(bomblont>201){
             bomblont=0;
@@ -903,47 +902,47 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           }
           if(bomblont==200){
               if(swordjakubpuchatek.x > bombarmed.x && swordjakubpuchatek.x < bombarmed.x+300 && swordjakubpuchatek.y > bombarmed.y && swordjakubpuchatek.y < bombarmed.y+300){
-                healthloss(20)
-                someonewashurt=true
+                healthloss(20);
+                someonewashurt=true;
             }
             if(counterskel>400){
               if(xskeleton.x > bombarmed.x && xskeleton.x < bombarmed.x+300 && xskeleton.y > bombarmed.y && xskeleton.y < bombarmed.y+300 && xskeletonhp>1){
                 xskeletonhp-=50;
-                isxskeletondeadyet()
-                someonewashurt=true
+                isxskeletondeadyet();
+                someonewashurt=true;
               }
             }
             if(counterskel>1200){
               if(bigskeleton.x > bombarmed.x && bigskeleton.x < bombarmed.x+300 && bigskeleton.y > bombarmed.y && bigskeleton.y < bombarmed.y+300 && bigskeletonhp>1){
                 bigskeletonhp-=50;
-                isbigskeletondeadyet()
-                someonewashurt=true
+                isbigskeletondeadyet();
+                someonewashurt=true;
               }
             }
             if(counterskel>800){
               if(normalskeleton.x > bombarmed.x && normalskeleton.x < bombarmed.x+300 && normalskeleton.y > bombarmed.y && normalskeleton.y < bombarmed.y+300 && normalskeletonhp>1){
                 normalskeletonhp-=50;
-                isnormalskeletondeadyet()
-                someonewashurt=true
+                isnormalskeletondeadyet();
+                someonewashurt=true;
               }
             }
             if(counterskel>1600){
               if(yskeleton.x > bombarmed.x && yskeleton.x < bombarmed.x+300 && yskeleton.y > bombarmed.y && yskeleton.y < bombarmed.y+300 && yskeletonhp>1){
                 yskeletonhp-=50;
-                isyskeletondeadyet()
-                someonewashurt=true
+                isyskeletondeadyet();
+                someonewashurt=true;
               }
             }
             if(someonewashurt == true){
-              spawnbomb()
+              spawnbomb();
               bombpickedup=false;
               someonewashurt=false;
             }
           }
-        })
+        });
         }
       }
-    })
+    });
 
 
 
@@ -969,20 +968,20 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
       .onHit("yskeleton", function(){
         yskeletonhp-=20;
         isyskeletondeadyet();
-      })
+      });
 
       Crafty.bind("EnterFrame", function(){                    
         bcounter++;
         
         if(bcounter>300){                
-          bcounter=0     
-          spawnmedpack()
+          bcounter=0;
+          spawnmedpack();
         }
-      })
+      });
 
       Crafty.bind("EnterFrame", function(){
         healthregen();
-      })
+      });
       
       Crafty.bind("EnterFrame", function(){
         counterskel++;
@@ -994,20 +993,20 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           .collision()
           .onHit("swordjakubpuchatek",function(){
             if(xskeleton.x<swordjakubpuchatek.x){
-              swordjakubpuchatek.x+=20
+              swordjakubpuchatek.x+=20;
             }
             if(xskeleton.x>swordjakubpuchatek.x){
-              swordjakubpuchatek.x-=20
+              swordjakubpuchatek.x-=20;
             }
             if(xskeleton.y<swordjakubpuchatek.y){
-              swordjakubpuchatek.y+=20
+              swordjakubpuchatek.y+=20;
             }
             if(xskeleton.y>swordjakubpuchatek.y){
-              swordjakubpuchatek.y-=20
+              swordjakubpuchatek.y-=20;
             }
             let damage = 15;
             healthloss(damage);
-          })
+          });
           skelspawned =true;
           skeletoncounter++;
         }
@@ -1019,19 +1018,19 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           .collision()
           .onHit("swordjakubpuchatek",function(){
             if(normalskeleton.x<swordjakubpuchatek.x){
-              swordjakubpuchatek.x+=20
+              swordjakubpuchatek.x+=20;
             }
             if(normalskeleton.x>swordjakubpuchatek.x){
-              swordjakubpuchatek.x-=20
+              swordjakubpuchatek.x-=20;
             }
             if(normalskeleton.y<swordjakubpuchatek.y){
-              swordjakubpuchatek.y+=20
+              swordjakubpuchatek.y+=20;
             }
             if(normalskeleton.y>swordjakubpuchatek.y){
-              swordjakubpuchatek.y-=20
+              swordjakubpuchatek.y-=20;
             }
             healthloss(20);
-          })
+          });
           skelspawned =true;
           skeletoncounter++;
         }
@@ -1043,19 +1042,19 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           .collision()
           .onHit("swordjakubpuchatek",function(){
             if(bigskeleton.x<swordjakubpuchatek.x){
-              swordjakubpuchatek.x+=40
+              swordjakubpuchatek.x+=40;
             }
             if(bigskeleton.x>swordjakubpuchatek.x){
-              swordjakubpuchatek.x-=40
+              swordjakubpuchatek.x-=40;
             }
             if(bigskeleton.y<swordjakubpuchatek.y){
-              swordjakubpuchatek.y+=40
+              swordjakubpuchatek.y+=40;
             }
             if(bigskeleton.y>swordjakubpuchatek.y){
-              swordjakubpuchatek.y-=40
+              swordjakubpuchatek.y-=40;
             }
             healthloss(35);
-          })
+          });
           skelspawned =true;
           skeletoncounter++;
         }
@@ -1067,24 +1066,24 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           .collision()
           .onHit("swordjakubpuchatek",function(){
             if(yskeleton.x<swordjakubpuchatek.x){
-              swordjakubpuchatek.x+=20
+              swordjakubpuchatek.x+=20;
             }
             if(yskeleton.x>swordjakubpuchatek.x){
-              swordjakubpuchatek.x-=20
+              swordjakubpuchatek.x-=20;
             }
             if(yskeleton.y<swordjakubpuchatek.y){
-              swordjakubpuchatek.y+=20
+              swordjakubpuchatek.y+=20;
             }
             if(yskeleton.y>swordjakubpuchatek.y){
-              swordjakubpuchatek.y-=20
+              swordjakubpuchatek.y-=20;
             }
             healthloss(10);
-          })
+          });
           skelspawned =true;
           skeletoncounter++;
         }
       }
-      })
+      });
   
       Crafty.bind("EnterFrame", function(){
           if(skelspawned==true){
@@ -1133,9 +1132,9 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
               }
             }
           }
-          })
+          });
     
-  })
+  });
 
   Crafty.scene("skeletonkilled", function(){
     bombpickedup=false;
@@ -1146,17 +1145,17 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     .attr({x:30, y:230, w: 700, h:50})
     .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"})
     .bind("EnterFrame",function(){
-      fcounter++
+      fcounter++;
       if(fcounter==300){
-        Crafty.enterScene("third")
+        Crafty.enterScene("third");
       }
     })
     .bind("KeyDown", function(e){
       if(e.key == Crafty.keys.SPACE){
         fcounter = 299;
       }
-    })
-  })
+    });
+  });
 
 
 
@@ -1165,7 +1164,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
   Crafty.scene("third", function(){
 
 
-    newtask("Wybierz życzenie w studni", "wellobjective")
+    newtask("Wybierz życzenie w studni", "wellobjective");
 
 
     function generateWorld() {
@@ -1174,13 +1173,13 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           var los=Math.round(Math.random()*100);
           
           if(los>98){
-           lawntype = Math.round((Math.random()*2)+3)
+           lawntype = Math.round((Math.random()*2)+3);
            Crafty.e("2D, Canvas, Color, lawn"+lawntype)
             .attr({x: i * 20, y: j * 20})
             .color("none");
           }
           if(los>90 && los<=98){
-          lawntype = Math.round(Math.random()+1)
+          lawntype = Math.round(Math.random()+1);
            Crafty.e("2D, Canvas, Color, lawn"+lawntype)
             .attr({x: i * 20, y: j * 20})
             .color("none");
@@ -1196,13 +1195,13 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
   
     function generateWestWall(){
       for(var i=0;i<25;i++){
-        lavatype = Math.round(Math.random()+1)
+        lavatype = Math.round(Math.random()+1);
         Crafty.e("2D, Canvas, Solid, Collision, fencevert")
           .attr({x:0 , y:i*20})
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.x+=12;
-          })
+          });
       }
     }
 
@@ -1211,47 +1210,47 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
         if(i>9 && i<15){
           continue;
         }
-        lavatype = Math.round(Math.random()+1)
+        lavatype = Math.round(Math.random()+1);
         Crafty.e("2D, Canvas, Solid, Collision, fencevert")
           .attr({x:780 , y:i*20})
           .checkHits("jakubpuchatek")
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.x-=12;
-          })
+          });
       }
     }
     function generateNorthWall(){
       for(var i=1;i<39;i++){
-        lavatype = Math.round(Math.random()+1)
+        lavatype = Math.round(Math.random()+1);
         Crafty.e("2D, Canvas, Solid, Collision, fencehori")
           .attr({x:20*i , y:0})
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.y+=12;
-          })
+          });
       }
       Crafty.e("2D, Canvas, Solid, Collision, fencerighttop")
-        .attr({x:780, y:0})
+        .attr({x:780, y:0});
       Crafty.e("2D, Canvas, Solid, Collision, fencelefttop")
-        .attr({x:0, y:0})
+        .attr({x:0, y:0});
 
     }
 
     function generateSouthWall(){
       for(var i=1;i<39;i++){
-        lavatype = Math.round(Math.random()+1)
+        lavatype = Math.round(Math.random()+1);
         Crafty.e("2D, Canvas, Solid, Collision, fencehori")
           .attr({x:i*20 , y:480})
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.y-=12; 
-          })
+          });
       }
       Crafty.e("2D, Canvas, Solid, Collision, fencerightbot")
-        .attr({x:780, y:480})
+        .attr({x:780, y:480});
       Crafty.e("2D, Canvas, Solid, Collision, fenceleftbot")
-        .attr({x:0, y:480})
+        .attr({x:0, y:480});
     }
 
     function generateHouses(){
@@ -1261,19 +1260,19 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
         .checkHits("swordjakubpuchatek")
         .bind("HitOn",function(){
             if(house.x<swordjakubpuchatek.x){
-              swordjakubpuchatek.x+=20
+              swordjakubpuchatek.x+=20;
             }
             if(house.x>swordjakubpuchatek.x){
-              swordjakubpuchatek.x-=20
+              swordjakubpuchatek.x-=20;
             }
             if(house.y<swordjakubpuchatek.y){
-              swordjakubpuchatek.y+=20
+              swordjakubpuchatek.y+=20;
             }
             if(house.y>swordjakubpuchatek.y){
-              swordjakubpuchatek.y-=20
+              swordjakubpuchatek.y-=20;
             }
 
-    })
+    });
     }
 
     function generateNextLevelTransition(){
@@ -1286,9 +1285,9 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
         cleardialog();
         clearobjectives();
         Crafty.enterScene("villageburned");
-        let swjphp = -1*(100-swordjakubpuchatekhp)
-      healthloss(swjphp)
-      })
+        let swjphp = -1*(100-swordjakubpuchatekhp);
+      healthloss(swjphp);
+      });
      }
 
     generateWorld();
@@ -1303,7 +1302,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     .attr({x:70, y:200})
     .fourway(200)
     .collision()
-    .checkHits("Solid")
+    .checkHits("Solid");
 
     var wishingwell = Crafty.e("2D, Canvas, Solid, Collision, wishingwell")
     .attr({x:570, y:220})
@@ -1311,16 +1310,16 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     .checkHits("Solid")
     .bind("HitOn",function(){
       if(wishingwell.x<swordjakubpuchatek.x){
-        swordjakubpuchatek.x+=12
+        swordjakubpuchatek.x+=12;
       }
       if(wishingwell.x>swordjakubpuchatek.x){
-        swordjakubpuchatek.x-=12
+        swordjakubpuchatek.x-=12;
       }
       if(wishingwell.y<swordjakubpuchatek.y){
-        swordjakubpuchatek.y+=12
+        swordjakubpuchatek.y+=12;
       }
       if(wishingwell.y>swordjakubpuchatek.y){
-        swordjakubpuchatek.y-=12
+        swordjakubpuchatek.y-=12;
       } 
       if(wellchoicehasbeenmade == false){
         document.getElementById("wellchoice").style.visibility = "visible";
@@ -1329,16 +1328,16 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
       }
       
 
-    })
+    });
 
 
-  })
+  });
 
 
 
   Crafty.scene("villageburned",function(){
     if(wellchoicehasbeenmade==false){
-      document.getElementById("wellchoice").style.visibility = "hidden"
+      document.getElementById("wellchoice").style.visibility = "hidden";
     }
     Crafty.background("#411561");
     Crafty.e("Text, 2D, DOM")
@@ -1346,17 +1345,17 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     .attr({x:30, y:230, w: 700, h:50})
     .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"})
     .bind("EnterFrame",function(){
-      hcounter++
+      hcounter++;
       if(hcounter==300){
-        Crafty.enterScene("fourth")
+        Crafty.enterScene("fourth");
       }
     })
     .bind("KeyDown", function(e){
       if(e.key == Crafty.keys.SPACE){
         hcounter = 299;
       }
-    })
-  })
+    });
+  });
 
 
 
@@ -1368,13 +1367,13 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           var los=Math.round(Math.random()*100);
           
           if(los>98){
-           sandtype = Math.round(Math.random()+4)
+           sandtype = Math.round(Math.random()+4);
            Crafty.e("2D, Canvas, Color, sand"+sandtype)
             .attr({x: i * 20, y: j * 20})
             .color("none");
           }
           if(los>90 && los<=98){
-          sandtype = Math.round((Math.random()*2)+1)
+          sandtype = Math.round((Math.random()*2)+1);
            Crafty.e("2D, Canvas, Color, sand"+sandtype)
             .attr({x: i * 20, y: j * 20})
             .color("none");
@@ -1390,14 +1389,14 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
   
     function generateWestWall(){
       for(var i=0;i<25;i++){
-        vinetype = Math.round(Math.random()+1)
+        vinetype = Math.round(Math.random()+1);
         Crafty.e("2D, Canvas, Solid, Collision, vinev"+vinetype)
           .attr({x:0 , y:i*20})
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.x+=12;
-          healthloss(5)
-          })
+          healthloss(5);
+          });
       }
     }
 
@@ -1406,80 +1405,80 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
         if(i>9 && i<15){
           continue;
         }
-        vinetype = Math.round(Math.random()+1)
+        vinetype = Math.round(Math.random()+1);
         Crafty.e("2D, Canvas, Solid, Collision, vinev"+vinetype)
           .attr({x:780 , y:i*20})
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.x-=12;
-          healthloss(5)
-          })
+          healthloss(5);
+          });
       }
     }
     function generateNorthWall(){
       for(var i=1;i<39;i++){
-        vinetype = Math.round(Math.random()+1)
+        vinetype = Math.round(Math.random()+1);
         Crafty.e("2D, Canvas, Solid, Collision, vineh"+vinetype)
           .attr({x:20*i , y:0})
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.y+=12;
-          healthloss(5)
-          })
+          healthloss(5);
+          });
       }
-      vinetype = Math.round(Math.random()+1)
+      vinetype = Math.round(Math.random()+1);
       Crafty.e("2D, Canvas, Solid, Collision, vinec"+vinetype)
-        .attr({x:780, y:0})
+        .attr({x:780, y:0});
 
-      vinetype = Math.round(Math.random()+1)
+      vinetype = Math.round(Math.random()+1);
       Crafty.e("2D, Canvas, Solid, Collision, vinec"+vinetype)
-        .attr({x:0, y:0})
+        .attr({x:0, y:0});
 
     }
 
     function generateSouthWall(){
       for(var i=1;i<39;i++){
-        vinetype = Math.round(Math.random()+1)
+        vinetype = Math.round(Math.random()+1);
         Crafty.e("2D, Canvas, Solid, Collision, vineh"+vinetype)
           .attr({x:i*20 , y:480})
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.y-=12; 
           healthloss(5);
-          })
+          });
       }
-      vinetype = Math.round(Math.random()+1)
+      vinetype = Math.round(Math.random()+1);
       Crafty.e("2D, Canvas, Solid, Collision, vinec"+vinetype)
         .attr({x:780, y:480})
 
-      vinetype = Math.round(Math.random()+1)
+;
       Crafty.e("2D, Canvas, Solid, Collision, vinec"+vinetype)
-        .attr({x:0, y:480})
+        .attr({x:0, y:480});
     }
 
     function generateObstacleWall1(){
       for(var i=0;i<20;i++){
-        cracktype = Math.round(Math.random()+1)
+        cracktype = Math.round(Math.random()+1);
         Crafty.e("2D, Canvas, Solid, Collision, sandcrack"+cracktype)
           .attr({x:650 , y:i*20})
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.x-=22;
-          healthloss(5)
-          })
+          healthloss(5);
+          });
       }
     }
 
     function generateObstacleWall2(){
       for(var i=5;i<25;i++){
-        cracktype = Math.round(Math.random()+1)
+        cracktype = Math.round(Math.random()+1);
         Crafty.e("2D, Canvas, Solid, Collision, sandcrack"+cracktype)
           .attr({x:500 , y:i*20})
           .checkHits("swordjakubpuchatek")
           .bind("HitOn", function(){
           swordjakubpuchatek.x-=22;
-          healthloss(5)
-          })
+          healthloss(5);
+          });
       }
     }
 
@@ -1493,9 +1492,9 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
         cleardialog();
         clearobjectives();
         Crafty.enterScene("snakesescaped");
-        let swjphp = -1*(100-swordjakubpuchatekhp)
-      healthloss(swjphp)
-      })
+        let swjphp = -1*(100-swordjakubpuchatekhp);
+      healthloss(swjphp);
+      });
      }
 
 
@@ -1508,34 +1507,34 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     generateObstacleWall2();
     generateNextLevelTransition();
 
-    newtask("Obroń się przed żmijami!!!!!")
+    newtask("Obroń się przed żmijami!!!!!");
 
    
 
     Crafty.bind("EnterFrame", function(){
       healthregen();
-    })
+    });
 
     Crafty.bind("KeyDown", function(e){
       if(e.key == Crafty.keys.UP_ARROW){
-        lastfacingdirection=0
+        lastfacingdirection=0;
       }
-    })
+    });
     Crafty.bind("KeyDown", function(e){
       if(e.key == Crafty.keys.RIGHT_ARROW){
-        lastfacingdirection=1
+        lastfacingdirection=1;
       }
-    })
+    });
     Crafty.bind("KeyDown", function(e){
       if(e.key == Crafty.keys.DOWN_ARROW){
-        lastfacingdirection=2
+        lastfacingdirection=2;
       }
-    })
+    });
     Crafty.bind("KeyDown", function(e){
       if(e.key == Crafty.keys.LEFT_ARROW){
-        lastfacingdirection=3
+        lastfacingdirection=3;
       }
-    })
+    });
 
     
     var swordjakubpuchatek = Crafty.e("2D, Canvas, Fourway, Collision, Solid, swordjakubpuchatek")
@@ -1544,14 +1543,14 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     .collision()
     .checkHits("Solid")
     .bind("EnterFrame",function(){
-      miodekcooldown++
+      miodekcooldown++;
       gcounter++;
       jcounter++;
         if(venomduration>0 && gcounter>40 && venomresist==false){
           venomduration--;
           healthloss(10);
           gcounter=0;
-          los = Math.round(Math.random()*3)
+          los = Math.round(Math.random()*3);
           Crafty.bind("EnterFrame",function(){
             mcounter++;
             if(los==0){
@@ -1571,7 +1570,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
               mcounter=0;
               addspeed+=0.3;
             }
-          })
+          });
       }
     })
     .onHit("enemy",function(){
@@ -1579,7 +1578,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
         venomduration +=5;
         jcounter=0;
       }
-    })
+    });
 
 
     
@@ -1592,21 +1591,21 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     .reel("cobramove", 2000, 0, 12, 2)
     .animate("cobramove", -1)
     .onHit("miodek", function(){
-      cobra1tookdamage(10)
+      cobra1tookdamage(10);
     })
     .onHit("swordjakubpuchatek", function(){
-      cobra1tookdamage(damagemultiplier*20)
+      cobra1tookdamage(damagemultiplier*20);
       if(cobra1.x<swordjakubpuchatek.x){
-        swordjakubpuchatek.x+=12
+        swordjakubpuchatek.x+=12;
       }
       if(cobra1.x>swordjakubpuchatek.x){
-        swordjakubpuchatek.x-=12
+        swordjakubpuchatek.x-=12;
       }
       if(cobra1.y<swordjakubpuchatek.y){
-        swordjakubpuchatek.y+=12
+        swordjakubpuchatek.y+=12;
       }
       if(cobra1.y>swordjakubpuchatek.y){
-        swordjakubpuchatek.y-=12
+        swordjakubpuchatek.y-=12;
       }
     })
     .bind("EnterFrame", function(){
@@ -1622,7 +1621,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
       else{
         cobra1.y+=cobra1speed;
       }
-    })
+    });
     
 
     cobra2 = Crafty.e("2D, Collision, Canvas, Solid, SpriteAnimation, cobra, enemy")
@@ -1632,21 +1631,21 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     .reel("cobramove", 1200, 0, 12, 2)
     .animate("cobramove", -1)
     .onHit("miodek", function(){
-      cobra2tookdamage(10)
+      cobra2tookdamage(10);
     })
     .onHit("swordjakubpuchatek", function(){
-      cobra2tookdamage(damagemultiplier*20)
+      cobra2tookdamage(damagemultiplier*20);
       if(cobra2.x<swordjakubpuchatek.x){
-        swordjakubpuchatek.x+=12
+        swordjakubpuchatek.x+=12;
       }
       if(cobra2.x>swordjakubpuchatek.x){
-        swordjakubpuchatek.x-=12
+        swordjakubpuchatek.x-=12;
       }
       if(cobra2.y<swordjakubpuchatek.y){
-        swordjakubpuchatek.y+=12
+        swordjakubpuchatek.y+=12;
       }
       if(cobra2.y>swordjakubpuchatek.y){
-        swordjakubpuchatek.y-=12
+        swordjakubpuchatek.y-=12;
       } 
     })
     .bind("EnterFrame", function(){
@@ -1662,7 +1661,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
       else{
         cobra2.y+=cobra2speed;
       }
-    })
+    });
     
 
     cobra3 = Crafty.e("2D, Collision, Canvas, Solid, SpriteAnimation, cobra, enemy")
@@ -1672,21 +1671,21 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     .reel("cobramove", 400, 0, 12, 2)
     .animate("cobramove", -1)
     .onHit("miodek", function(){
-      cobra3tookdamage(10)
+      cobra3tookdamage(10);
     })
     .onHit("swordjakubpuchatek", function(){
-      cobra3tookdamage(damagemultiplier*20)
+      cobra3tookdamage(damagemultiplier*20);
       if(cobra3.x<swordjakubpuchatek.x){
-        swordjakubpuchatek.x+=12
+        swordjakubpuchatek.x+=12;
       }
       if(cobra3.x>swordjakubpuchatek.x){
-        swordjakubpuchatek.x-=12
+        swordjakubpuchatek.x-=12;
       }
       if(cobra3.y<swordjakubpuchatek.y){
-        swordjakubpuchatek.y+=12
+        swordjakubpuchatek.y+=12;
       }
       if(cobra3.y>swordjakubpuchatek.y){
-        swordjakubpuchatek.y-=12
+        swordjakubpuchatek.y-=12;
       } 
     })
     .bind("EnterFrame", function(){
@@ -1702,13 +1701,13 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
       else{
         cobra3.y+=cobra3speed;
       }
-    })
+    });
 
 
 
 
     
-  })
+  });
 
   Crafty.scene("snakesescaped",function(){
 
@@ -1718,17 +1717,17 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
       .attr({x:30, y:230, w: 700, h:50})
       .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"})
       .bind("EnterFrame",function(){
-        ncounter++
+        ncounter++;
         if(ncounter==300){
-          Crafty.enterScene("prefifth")
+          Crafty.enterScene("prefifth");
         }
       })
       .bind("KeyDown", function(e){
         if(e.key == Crafty.keys.SPACE){
           ncounter = 299;
         }
-      })
-    })
+      });
+    });
 
     Crafty.scene("prefifth",function(){
 
@@ -1738,17 +1737,17 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
       .attr({x:30, y:230, w: 700, h:50})
       .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"})
       .bind("EnterFrame",function(){
-        ncounter++
+        ncounter++;
         if(ncounter==300){
-          Crafty.enterScene("fifth")
+          Crafty.enterScene("fifth");
         }
       })
       .bind("KeyDown", function(e){
         if(e.key == Crafty.keys.SPACE){
           ncounter = 299;
         }
-      })
-    })
+      });
+    });
 
     Crafty.scene("fifth", function(){
 
@@ -1758,7 +1757,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
             var los=Math.round(Math.random()*100);
             
             if(los>98){
-             concretetype = Math.ceil(Math.random()*4)
+             concretetype = Math.ceil(Math.random()*4);
              Crafty.e("2D, Canvas, Color, concrete"+concretetype)
               .attr({x: i * 20, y: j * 20})
               .color("none");
@@ -1774,7 +1773,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     
       function generateWestWall(){
         for(var i=0;i<25;i++){
-          Crafty.e("2D, Canvas, Solid, Collision, void")
+          Crafty.e("2D, Canvas, Solid, Collision")
             .collision()
             .attr({x:0 , y:i*20})
             .checkHits("swordjakubpuchatek")
@@ -1783,13 +1782,13 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
             })
             .onHit("swordjakubpuchatek",function(){
               swordjakubpuchatek.x+=12; 
-            })
+            });
         }
       }
   
       function generateEastWall(){
         for(var i=0;i<25;i++){
-          Crafty.e("2D, Canvas, Solid, Collision, void")
+          Crafty.e("2D, Canvas, Solid, Collision")
             .collision()
             .attr({x:780 , y:i*20})
             .checkHits("swordjakubpuchatek")
@@ -1798,12 +1797,12 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
             })
             .onHit("swordjakubpuchatek",function(){
               swordjakubpuchatek.x-=12; 
-            })
+            });
         }
       }
       function generateNorthWall(){
         for(var i=0;i<41;i++){
-          curbtype = Math.round(Math.random()+1)
+          curbtype = Math.round(Math.random()+1);
           Crafty.e("2D, Canvas, Solid, Collision, curb"+ curbtype)
             .collision()
             .attr({x:20*i , y:0})
@@ -1813,13 +1812,13 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
             })
             .onHit("swordjakubpuchatek",function(){
               swordjakubpuchatek.y+=12; 
-            })
+            });
         }
       }
   
       function generateSouthWall(){
         for(var i=1;i<39;i++){
-          Crafty.e("2D, Canvas, Solid, Collision, void")
+          Crafty.e("2D, Canvas, Solid, Collision")
             .collision()
             .attr({x:i*20 , y:480})
             .checkHits("swordjakubpuchatek")
@@ -1828,7 +1827,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
             })
             .onHit("swordjakubpuchatek",function(){
               swordjakubpuchatek.y-=12; 
-            })
+            });
         }
       }
 
@@ -1836,26 +1835,26 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
 
         for(var j=1;j<25;j++){
           if(j>7 && j<18){
-            continue
+            continue;
           }
           for(var i=2;i<40;i+=5){
             Crafty.e("2D, Canvas, Color, stripe")
               .attr({x:i*20 , y:j*20})
-              .color("none")
+              .color("none");
           }
         }
       }
 
-      generateWorld()
-      generateEastWall()
-      generateNorthWall()
-      generateWestWall()
-      generateSouthWall()
-      generateStripes()
+      generateWorld();
+      generateEastWall();
+      generateNorthWall();
+      generateWestWall();
+      generateSouthWall();
+      generateStripes();
 
-      newdialogbubble(miodektut, 0)
+      newdialogbubble(miodektut, 0);
 
-      newtask("Pokonaj ruskiego agenta", "killninja")
+      newtask("Pokonaj ruskiego agenta", "killninja");
 
       var swordjakubpuchatek = Crafty.e("2D, Canvas, Fourway, Collision, Solid, swordjakubpuchatek")
     .attr({x:70, y:70})
@@ -1863,7 +1862,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     .collision()
     .checkHits("Solid")
     .bind("EnterFrame",function(){
-      miodekcooldown++
+      miodekcooldown++;
     })
     .bind("KeyDown", function(e){
       if(e.key == Crafty.keys.P && miodekcooldown > 50){
@@ -1891,17 +1890,17 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
         })
         .onHit("Solid", function(){
           if(pcounter>20){
-            this.destroy()
+            this.destroy();
             pcounter=0;
 
           }
-        })
+        });
       }
     })
     .onHit("miodek", function(){
       if(pcounter>20){
-        healthloss(15)}
-    })
+        healthloss(15);}
+    });
 
         ninja = Crafty.e("2D, Canvas, Collision, Solid, ninja")
           .attr({x:700, y:400})
@@ -1913,15 +1912,15 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           .bind("EnterFrame", function(){
             healthregen();
               if(swordjakubpuchatek.x > ninja.x-100 && swordjakubpuchatek.x < ninja.x+100 && swordjakubpuchatek.y > ninja.y-100 && swordjakubpuchatek.y < ninja.y+100){
-                ninja.x =Math.floor((Math.random()*650)+50)
-                ninja.y = Math.floor((Math.random()*400)+50)
+                ninja.x =Math.floor((Math.random()*650)+50);
+                ninja.y = Math.floor((Math.random()*400)+50);
               }
               ocounter++;
               
               if(ocounter>100){
                 ocounter=0;
-                ninjatargetx = Math.floor((Math.random()*650)+50)
-                ninjatargety = Math.floor((Math.random()*400)+50)
+                ninjatargetx = Math.floor((Math.random()*650)+50);
+                ninjatargety = Math.floor((Math.random()*400)+50);
               }
               if(ninjatargetx-ninja.x<0){
                 ninja.x-=ninjaspeed;
@@ -1936,11 +1935,11 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
                 ninja.y+=ninjaspeed;
               }
 
-              rcounter++
+              rcounter++;
               if(rcounter>200){
                 rcounter=0;
-                shurikenxdirection = (ninja.x-swordjakubpuchatek.x)/30
-                shurikenydirection = (ninja.y-swordjakubpuchatek.y)/30
+                shurikenxdirection = (ninja.x-swordjakubpuchatek.x)/30;
+                shurikenydirection = (ninja.y-swordjakubpuchatek.y)/30;
 
                 var shuriken = Crafty.e("2D, Canvas, Solid, Collision, SpriteAnimation, shuriken")
                 .attr({x:ninja.x, y:ninja.y})
@@ -1949,30 +1948,30 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
                 .animate("shurikenspin", -1)
                 .onHit("swordjakubpuchatek", function(){
                   healthloss(30);
-                  shuriken.destroy()
-                })
+                  shuriken.destroy();
+                });
                 Crafty.bind("EnterFrame",function(){
                   shuriken.x-=shurikenxdirection;
                   shuriken.y-=shurikenydirection;
 
                   if(rcounter>150){
-                    shuriken.destroy()
+                    shuriken.destroy();
                   }
 
-                })
+                });
               }
 
-              scounter++
+              scounter++;
 
               if(scounter>300){
-                scounter=0
-                spawnmedpack()
+                scounter=0;
+                spawnmedpack();
               }
 
 
-      })
+      });
 
-    })
+    });
 
     Crafty.scene("ninjadown", function(){
       Crafty.background("blue");
@@ -1981,17 +1980,17 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
       .attr({x:30, y:230, w: 700, h:50})
       .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"})
       .bind("EnterFrame",function(){
-        tcounter++
+        tcounter++;
         if(tcounter==300){
-          Crafty.enterScene("sixth")
+          Crafty.enterScene("sixth");
         }
       })
       .bind("KeyDown", function(e){
         if(e.key == Crafty.keys.SPACE){
           tcounter = 299;
         }
-      })
-    })
+      });
+    });
 
     Crafty.scene("sixth", function(){
 
@@ -2007,7 +2006,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     
       function generateWestWall(){
         for(var i=0;i<25;i++){
-          Crafty.e("2D, Canvas, Solid, Collision, void")
+          Crafty.e("2D, Canvas, Solid, Collision")
             .collision()
             .attr({x:0 , y:i*20})
             .checkHits("swordjakubpuchatek")
@@ -2016,13 +2015,13 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
             })
             .onHit("swordjakubpuchatek",function(){
               swordjakubpuchatek.x+=12; 
-            })
+            });
         }
       }
   
       function generateEastWall(){
         for(var i=0;i<25;i++){
-          Crafty.e("2D, Canvas, Solid, Collision, void")
+          Crafty.e("2D, Canvas, Solid, Collision")
             .collision()
             .attr({x:780 , y:i*20})
             .checkHits("swordjakubpuchatek")
@@ -2031,12 +2030,12 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
             })
             .onHit("swordjakubpuchatek",function(){
               swordjakubpuchatek.x-=12; 
-            })
+            });
         }
       }
       function generateNorthWall(){
         for(var i=0;i<41;i++){
-          curbtype = Math.round(Math.random()+1)
+          curbtype = Math.round(Math.random()+1);
           Crafty.e("2D, Canvas, Solid, Collision, curb"+ curbtype)
             .collision()
             .attr({x:20*i , y:0})
@@ -2046,13 +2045,13 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
             })
             .onHit("swordjakubpuchatek",function(){
               swordjakubpuchatek.y+=12; 
-            })
+            });
         }
       }
   
       function generateSouthWall(){
         for(var i=1;i<39;i++){
-          Crafty.e("2D, Canvas, Solid, Collision, void")
+          Crafty.e("2D, Canvas, Solid, Collision")
             .collision()
             .attr({x:i*20 , y:480})
             .checkHits("swordjakubpuchatek")
@@ -2061,20 +2060,20 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
             })
             .onHit("swordjakubpuchatek",function(){
               swordjakubpuchatek.y-=12; 
-            })
+            });
         }
       }
 
-      generateWorld()
-      generateWestWall()
-      generateSouthWall()
-      generateNorthWall()
-      generateEastWall()
+      generateWorld();
+      generateWestWall();
+      generateSouthWall();
+      generateNorthWall();
+      generateEastWall();
 
-      newtask("Pokonaj Putina")
+      newtask("Pokonaj Putina");
 
       Crafty.e("2D, Canvas, carpet")
-      .attr({x:250, y:150})
+      .attr({x:250, y:150});
 
 
       var swordjakubpuchatek = Crafty.e("2D, Canvas, Fourway, Collision, Solid, swordjakubpuchatek")
@@ -2083,7 +2082,7 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
       .collision()
       .checkHits("Solid")
       .bind("EnterFrame",function(){
-        miodekcooldown++
+        miodekcooldown++;
       })
       .bind("KeyDown", function(e){
         if(e.key == Crafty.keys.P && miodekcooldown > 50){
@@ -2111,17 +2110,17 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           })
           .onHit("Solid", function(){
             if(pcounter>20){
-              this.destroy()
+              this.destroy();
               pcounter=0;
   
             }
-          })
+          });
         }
       })
       .onHit("miodek", function(){
         if(pcounter>20){
-          healthloss(15)}
-      })
+          healthloss(15);}
+      });
 
 
 
@@ -2133,29 +2132,29 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
       .onHit("swordjakubpuchatek", function(){
         healthloss(30);
         if(putin.x<swordjakubpuchatek.x){
-          swordjakubpuchatek.x+=20
+          swordjakubpuchatek.x+=20;
         }
         if(putin.x>swordjakubpuchatek.x){
-          swordjakubpuchatek.x-=20
+          swordjakubpuchatek.x-=20;
         }
         if(putin.y<swordjakubpuchatek.y){
-          swordjakubpuchatek.y+=20
+          swordjakubpuchatek.y+=20;
         }
         if(putin.y>swordjakubpuchatek.y){
-          swordjakubpuchatek.y-=20
+          swordjakubpuchatek.y-=20;
         }
         putinhp-=(damagemultiplier* 20);
         isputindeadyet();
       })
       .bind("EnterFrame", function(){
 
-        healthregen()
+        healthregen();
         ucounter++;
         
         if(ucounter>100){
           ucounter=0;
-          putintargetx = Math.floor((Math.random()*250)+400)
-          putintargety = Math.floor((Math.random()*200)+150)
+          putintargetx = Math.floor((Math.random()*250)+400);
+          putintargety = Math.floor((Math.random()*200)+150);
         }
         if(putintargetx-putin.x<0){
           putin.x-=putinspeed;
@@ -2178,12 +2177,12 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
         if(wcounter>300){
           putin.reelPosition(0);
           wcounter=0;
-          projectile1xdirection = (putin.x-swordjakubpuchatek.x)/40
-          projectile1ydirection = (putin.y-swordjakubpuchatek.y)/40
-          projectile2xdirection = (putin.x-swordjakubpuchatek.x - 100)/40
-          projectile2ydirection = (putin.y-swordjakubpuchatek.y - 100)/40
-          projectile3xdirection = (putin.x-swordjakubpuchatek.x + 100)/40
-          projectile3ydirection = (putin.y-swordjakubpuchatek.y + 100)/40
+          projectile1xdirection = (putin.x-swordjakubpuchatek.x)/40;
+          projectile1ydirection = (putin.y-swordjakubpuchatek.y)/40;
+          projectile2xdirection = (putin.x-swordjakubpuchatek.x - 100)/40;
+          projectile2ydirection = (putin.y-swordjakubpuchatek.y - 100)/40;
+          projectile3xdirection = (putin.x-swordjakubpuchatek.x + 100)/40;
+          projectile3ydirection = (putin.y-swordjakubpuchatek.y + 100)/40;
 
           var projectile1 = Crafty.e("2D, Canvas, Solid, Collision, SpriteAnimation, sickle")
           .attr({x:putin.x, y:putin.y})
@@ -2192,8 +2191,8 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           .animate("sicklespin", -1)
           .onHit("swordjakubpuchatek", function(){
             healthloss(20);
-            projectile1.destroy()
-          })
+            projectile1.destroy();
+          });
           var projectile2 = Crafty.e("2D, Canvas, Solid, Collision, SpriteAnimation, sickle")
           .attr({x:putin.x, y:putin.y})
           .collision()
@@ -2201,8 +2200,8 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           .animate("sicklespin", -1)
           .onHit("swordjakubpuchatek", function(){
             healthloss(20);
-            projectile2.destroy()
-          })
+            projectile2.destroy();
+          });
           var projectile3 = Crafty.e("2D, Canvas, Solid, Collision, SpriteAnimation, sickle")
           .attr({x:putin.x, y:putin.y})
           .collision()
@@ -2210,8 +2209,8 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
           .animate("sicklespin", -1)
           .onHit("swordjakubpuchatek", function(){
             healthloss(20);
-            projectile3.destroy()
-          })
+            projectile3.destroy();
+          });
           Crafty.bind("EnterFrame",function(){
             projectile1.x-=projectile1xdirection;
             projectile1.y-=projectile1ydirection;
@@ -2221,43 +2220,43 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
             projectile3.y-=projectile3ydirection;
 
             if(wcounter>150){
-              projectile1.destroy()
-              projectile2.destroy()
-              projectile3.destroy()
+              projectile1.destroy();
+              projectile2.destroy();
+              projectile3.destroy();
             }
 
-          })
+          });
         }
         
         if(putinhp<100 && putinhp>20){
-          putin.reelPosition(1)
+          putin.reelPosition(1);
         }
 
         if(putinhp<=20){
-          putin.reelPosition(3)
+          putin.reelPosition(3);
         }
-        xcounter++
+        xcounter++;
 
           if(xcounter>300){
-            xcounter=0
-            spawnmedpack()
+            xcounter=0;
+            spawnmedpack();
           }
         
         
-      })
+      });
 
 
 
 
-    })
+    });
 
     Crafty.scene("end", function(){
       Crafty.background("gray");
       Crafty.e("Text, 2D, DOM")
       .text("Po tym jak pokonałeś swojego najgorszego wroga, czujesz, że wypełniłeś swój życiowy cel. Odchodzisz w kierunku Stumilowego Lasu, po drodze wybuchając cały budynek KGB.")
       .attr({x:30, y:230, w: 700, h:50})
-      .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"})
-    })
+      .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"});
+    });
 
 
   Crafty.scene("dead", function(){
@@ -2265,10 +2264,10 @@ var miodektut = ["Kliknij P aby strzelać telepatycznym miodkiem"]
     Crafty.e("Text, 2D, DOM")
     .text("Zginoles. Odswiez strone by zagrac ponownie")
     .attr({x:30, y:230, w: 700, h:50})
-    .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"})
-  })
+    .css({"text-align": "center", "color": "white", "font-size": "30px", "font-family": "'Courier New', Courier, monospace;"});
+  });
 
 
 
 
-Crafty.enterScene("introduction")
+Crafty.enterScene("introduction");
